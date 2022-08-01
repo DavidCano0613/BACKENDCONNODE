@@ -1,24 +1,26 @@
 const express = require('express')
-const usersRouter = express.Router()
 const {UsersService} = require('../services/usersService.js')
+const usersRouter = express.Router();
+
 
 const usuarios = new UsersService();
 
-usersRouter.get('/',async (req,res) => {
+
+usersRouter.get('/', async (req,res) => {
   const users = await usuarios.find()
   res.json(users)
 });
 
-// usersRouter.get('/filter', (req, res) => {
-//   res.send('Hola soy un filter de usuarios');
-// });
-
-usersRouter.get('/:guid', async (req, res) => {
-  const { guid } = req.params;
-  const user = await usuarios.findOne(guid)
-  res.json(user);
+usersRouter.get('/:guid', async (req,res,next) => {
+  try{
+      const { guid } = req.params;
+      const user = await usuarios.findOne(guid);
+      res.json(user);
+  } catch(error){
+    //*Esto lo  que hace es llamar a los middlewares de tipo error.
+   next(error);
+  }
 });
-
 
 usersRouter.post('/', async (req,res)=>{
   const body = req.body;

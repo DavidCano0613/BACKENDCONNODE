@@ -1,4 +1,5 @@
 const { dataBase } = require('../database.js');
+const boom = require('@hapi/boom');
 
 class UsersService {
   constructor() {
@@ -25,7 +26,12 @@ class UsersService {
   }
 
   async findOne(guid) {
-    return this.users.find((usuario) => usuario.guid === guid);
+  const name = gettotal()
+   return this.users.find((usuario) => usuario.guid === guid);
+    // if (!user) throw boom.notFound('User not found');
+    //todo let isActive = this.users.find(user => user.isActive === false)
+    //todo if(isActive) throw boom.conflict('User is not active')
+    // return user;
   }
 
   async create(data) {
@@ -40,7 +46,7 @@ class UsersService {
   async update(guid, changes) {
     const userIndex = this.users.findIndex((user) => user.guid === guid);
     if (userIndex === -1) {
-      throw new Error('Usuario no encontrado');
+      throw boom.notFound('User not found');
     }
     const usuario = this.users[userIndex];
     this.users[userIndex] = {
@@ -55,12 +61,10 @@ class UsersService {
     if (userIndex === -1) {
       throw new Error('Usuario no encontrado');
     }
-    this.users.splice(userIndex, 1);
+    this.users.splice(userIndex,1);
     return { guid };
   }
 }
 
 module.exports = { UsersService };
 
-// const array = [1,2,3,4,5,6,7,7,8]
-// console.log(array.splice(0,1))

@@ -4,7 +4,6 @@ const { usersRouter } = require('./usersRouter.js');
 const { categoriesRouter } = require('./categoriesRouter.js');
 
 
-
 function routerApi(aplicacion){
   const router = express.Router();
   aplicacion.use('/api/version1',router);

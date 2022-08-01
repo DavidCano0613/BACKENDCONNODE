@@ -1,0 +1,162 @@
+# CREACÍON DE UN BACKEND CON NODE JS
+
+## PASOS PARA CREAR UN BACKEND CON EXPRESS JS
+
+1. Elegir un estilo de arquitectura de software
+2. Configuración del entorno de desarrollo y de producción con buenas practicas
+3. Instalación de la librerias que seran necesarias para el desarrollo.
+4. Creación del servidor con express js
+5. Separar responsabilidades como lo indique la arquitectura elegida:
+6. Creación de la capa de routing.
+7. Creación de los middlewares.
+8. Creación de la capa de servicios.
+9. Establecer la capa de acceso a datos (_conexión con bases de datos_).
+10. Capa de seguridad, establecer todo lo relacionado con autenticación y autorización.
+11. Creación de pruebas y tests.
+12. Deploy.
+
+---
+
+# The clean architecture.
+
+Es un estilo de arquitectura de software que funciona separando el software en capas.
+
+>La capa mas pequeña es la de entidades en esta capa es donde se definen las entidades base del negocio en este proyecto por ejemplo, usuarios, productos, ordenes de compra etc...
+
+>Luego se tiene una capa de casos de uso, aqui normalmente se tiene todo lo relacionado a la lógica de negocio y se ven los servicios en esta capa.
+
+>Luego estan los controladores que son los que brindan acceso a estos servicios, aquí se ve el routing y los middlewares.
+
+Imagen:
+![](./assets/theclena.png)
+
+De una forma más transparente:
+![](./assets/Captura%20de%20pantalla%202022-07-31%20140441.png)
+
+
+>Finalmente esta la capa de cliente que seran todos los dispositivos conectado a ese backend
+
+> Resumen del flujo: Los clientes se conectan con los controladores, estos con los servicios y los servicios con las bases de datos o su respectiva fuente de información.
+
+![](./assets/Captura%20de%20pantalla%202022-07-31%20170216.png)
+
+
+---
+
+# Configuración de entorno de etorno de desarrollo y de producción con buenas practicas:
+
+Establecer una buena configuración servira para trabajar de una forma más apropiada.
+
+- Git ignore
+- Configuración del editor de código: Es recomendable para que todos los desarrolladores tengan la misma configuración en su editor de código. Tener la extensión editorconfig. Se puede establecer una configuración que lo que haga sea formatear el editor de código para que todos trabajen de la misma manera.
+- Linters:
+- Pipelines:
+- Nodemon como servidor de desarrollo: Crear algunas tareas o scripts en el package json.
+- Instalación de paquetes: npm i nodemon eslint eslint-config-prettier eslint-plugin-prettier prettier -D
+
+¿Qué es el archivo .gitignore?
+https://www.freecodecamp.org/espanol/news/gitignore-explicado-que-es-y-como-agregar-a-tu-repositorio/#:~:text=gitignore%20%2C%20es%20un%20archivo%20de,puedes%20crear%20un%20archivo%20global%20.
+
+¿Porqué configurar el editor de código?
+https://www.kodetop.com/editorconfig-para-configurar-tu-editor-de-codigo/
+
+¿Que es linting?
+https://kb.rolosa.com/que-es-un-linter/
+
+Scrips de npm
+https://lenguajejs.com/npm/administracion/scripts-de-npm/
+
+
+Todo sobre el package json
+https://medium.com/noders/t%C3%BA-yo-y-package-json-9553929fb2e3
+
+
+---
+# Instalación de la librerias que seran necesarias para el desarrollo
+
+Para el desarrollo de este curso se instalaran las siguientes librerias:
+
+1. Express
+2. Boom
+3.
+4.
+5.
+
+
+---
+
+# Creación del servidor con express js
+
+EXPRESS: Es una libreria que permite gestionar de una mejor manera un servidor web. Express crea una función que permite crear un servidor con: nombre_servidor = express()
+
+La instacia de express trae en forma de función los métodos/verbos http.
+**get post put patch y delete**.
+
+A estas funciones se les puede pasar los paths (_URLS,Endpoints_) a los cuales los clientes van a atacar con esos verbos, esto se puede entender de la siguiente forma:
+El método recibe dos parametros la url y una función de tipo callback que ejecuta una programación CUANDO se ataque a ese endpoint. El callback recibe dos objetos que son *el request y el response*.
+
+Los objetos request y response son muy importante puesto que por medio de estos es que se envía y recibe información. En el curso de node js se amplifica que propiedades y métodos contienen estos objetos y para que sirven.
+
+Express permite trabajar con el body de una forma más amigable. Express contiene algo llamado *parser* que ayuda a tomar el body que viene en forma de stream y _parsearlo_ a algun tipo de dato, ya sea un archivo de texto, un json o lo que sea. Lo más usual es parsearlo a JSON.
+
+
+---
+
+# Separación de responsabilidades
+
+Hace parte de los principios SOLID. En este caso *Single Responsability Principle* establece que es una mala practica tener código que hace de todo, es decir si una función tiene como nombre sumar, no debería en su cuerpo estar calculando integrales. Esto se puede llevar al plano de archivos, routing, clases, modulos,servicios y más cosas.
+
+
+---
+# Creación de la capa de routing
+
+Como se menciono the clean architecture establece que el routing hace parte de la capa de acceso a los servicios y también se encarga de proporcionar los endpoints a los cuales los clientes se van a conectar para acceder a estos recursos. Sin embargo es una pesima practica definir todo el routing en el archivo index donde se levanta el servidor.
+
+Los routers en express son una herramienta que permiten agrupar rutas para así separar la lógica de los endpoints.
+
+De acuerdo con el Single Responsability Principle todo el routing deberia dividirse en archivos que se encarguen de definir las rutas de cada endopoint en espesifico. Lo ideal es crear una carpeta que contenga todo el routing.
+
+El nombre que se le dan a estos archivos dependen del equipo de desarrollo.
+
+
+---
+# Creación de los middlewares
+
+Los middlewares son funciones que estan en medio del request y del response. Pueden ser utilizados de forma global como por ejemplo: Para capturar errores a nivel general en toda la aplicación pero también se pueden usar a nivel de cada endpoint.
+
+Una de sus propiedades es que pueden funcionar de forma secuencial. Es decir cada middleware puede tener una función en espesifica, una vez termine sigue el otro middleware con otra lógica diferente. Es como tener funciones tradicionales conectadas en cadenas, es decir se ejecuta una y le pasa el flujo a la siguiente y asi sucesivamente Un middleware puede bloquear, Es decir si cierta lógica no se cumple no se puede seguir con el siguiente middleware.
+
+El método next (que también viene como parámetro) es el que permite que el siga el proximo middleware.
+
+### Uses Cases
+- Funcionan como pipes
+- Validar datos
+- Capturar errores
+- Validar permisos
+- Controlar accesos
+
+### Middleware de tipo error.
+Tienen el parámetro error de primero.
+Es util para crear un middleware global que acompañe a todas las peticiones de tal manera de que si sale un error se capture este primero que todo y luego se siga con lo demas
+
+Este tipo de middlewares se deben crear despues de hacer el routing
+
+### Middleware de tipo validación
+Otro uso muy común de los middlewares es validar los datos que vienen desde el cliente(front-end).
+
+
+---
+# Creación de la capa de servicios
+
+Es la capa donde se pone la lógica del negocio como tal. Esta capa encapsula todos los casos de uso.
+
+Los servicios tienen la lógica del negocio y obtienen información por medio de librerias a una base de datos o de una api externa. Luego estos servicios pueden sen consumidos por los controladores. Practicamente en esta capa se centraliza la lógica de la aplicación.
+
+
+
+
+---
+
+
+
+
