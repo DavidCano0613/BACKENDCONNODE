@@ -12,7 +12,6 @@ app.use(express.json());
 //*Acceso a la capa de routing
 routerApi(app);
 
-
 //*Uso de middlewares de errores, el orden es importante.
 app.use(logErrors);
 app.use(boomErrorHandler);

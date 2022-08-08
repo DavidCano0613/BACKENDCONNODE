@@ -29,14 +29,12 @@ class UsersService {
     if (!user){
       throw boom.notFound('User not found');
     };
-    //todo let isActive = this.users.find(user => user.isActive === false)
-    //todo if(isActive) throw boom.conflict('User is not active')
     return user;
   }
 
   async create(data) {
     const newUser = {
-      guid: '1000396156',
+      guid: (Math.random()*20),
       ...data,
     };
     this.users.push(newUser);
