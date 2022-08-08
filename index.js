@@ -3,11 +3,30 @@ const express = require('express');
 const { routerApi } = require('./routes/index.js');
 
 const { logErrors, errorHandler, boomErrorHandler  } = require('./middlewares/errorHandler.js');
+const cors = require('cors')
 
 const app = express();
 const port = 3001;
 
 app.use(express.json());
+
+//*Le da acceso a todo el mundo
+// app.use(cors());
+
+//*Asi se da acceso solo a los que se supone que se contemplan
+const whiteList = ['http://localhost:8080'] //*Tambien podrian ponerse dominios 
+const options = {
+  origin: (origin,callback)=>{
+    if(whiteList.includes(origin)){
+      callback(null,true)
+    } else{
+      callback(new Error("No estas autorizado"))
+    }
+  }
+}
+
+app.use(cors(options));
+
 
 //*Acceso a la capa de routing
 routerApi(app);

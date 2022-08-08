@@ -159,14 +159,23 @@ Los servicios tienen la lógica del negocio y obtienen información por medio de
 
 # Considereaciones para hacer deploy
 
-1. Cors
-2. Https
-3. Procesos de build
-4. Remover log
+1. Evaluar los Cors
+2. Que la api este en un servidor https
+3. Correr todos los procesos de build (typescript o sass por ejemplo)
+4. Remover todos los console.log
 5. Seguridad (helmet)
 6. Testing
+ 
+# CORS 
+Uno de los problemas más comunes es el problema de cors, es un problema muy común a la hora de conectar el **Back-end con el Front-end**.
 
-Uno de los problemas más comunes es el problema de cors, es un problema muy común a la hora de conectar el back-end con el front-end.
+### Cross.Origin Resource Sharing
+Significa que los servidores tienen una protección por defecto y es que solo aceptan peticiones desde su mismo origen. 
 
+Si las peticiones salen desde el mismo origen (localhost) el Backend acepta la petición, pero cuando se tienen diferentes origenes (clientes, un front o un movil). 
+
+Insomnia o postamn y este tipo de herramientas nos abstraen de ver este error porque por debajo usan un proxy que cambia el origen. 
+
+### Las formas de resolver el problema es la siguiente:
 
 
