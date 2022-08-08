@@ -142,7 +142,9 @@ Es util para crear un middleware global que acompañe a todas las peticiones de 
 Este tipo de middlewares se deben crear despues de hacer el routing
 
 ### Middleware de tipo validación
-Otro uso muy común de los middlewares es validar los datos que vienen desde el cliente(front-end).
+Otro uso muy común de los middlewares es validar los datos que vienen desde el cliente(front-end). Para esto existe una librería llamada Joi.
+
+Como backend un desarrollador debería asgurarse de que lo que le envia el front-end cumple con la integridad de datos, que un precio este un formato adecuado o por ejemplo que se envien los atributos que se esperan, con los middlewares se pueden capturar este tipo de errores antes de que lleguen a la capa de servicios.
 
 
 ---
@@ -153,10 +155,18 @@ Es la capa donde se pone la lógica del negocio como tal. Esta capa encapsula to
 Los servicios tienen la lógica del negocio y obtienen información por medio de librerias a una base de datos o de una api externa. Luego estos servicios pueden sen consumidos por los controladores. Practicamente en esta capa se centraliza la lógica de la aplicación.
 
 
-
-
 ---
 
+# Considereaciones para hacer deploy
+
+1. Cors
+2. Https
+3. Procesos de build
+4. Remover log
+5. Seguridad (helmet)
+6. Testing
+
+Uno de los problemas más comunes es el problema de cors, es un problema muy común a la hora de conectar el back-end con el front-end.
 
 
 

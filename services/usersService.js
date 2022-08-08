@@ -1,6 +1,5 @@
 const { dataBase } = require('../database.js');
 const boom = require('@hapi/boom');
-
 class UsersService {
   constructor() {
     this.users = [];
@@ -18,7 +17,7 @@ class UsersService {
   }
 
   async find() {
-    return new Promise((resolve, reject) => {
+    return new Promise((resolve,reject) => {
       setTimeout(() => {
         resolve(this.users);
       }, 5000);
@@ -26,12 +25,13 @@ class UsersService {
   }
 
   async findOne(guid) {
-  const name = gettotal()
-   return this.users.find((usuario) => usuario.guid === guid);
-    // if (!user) throw boom.notFound('User not found');
+   const user = this.users.find((usuario) => usuario.guid === guid);
+    if (!user){
+      throw boom.notFound('User not found');
+    };
     //todo let isActive = this.users.find(user => user.isActive === false)
     //todo if(isActive) throw boom.conflict('User is not active')
-    // return user;
+    return user;
   }
 
   async create(data) {
@@ -45,7 +45,7 @@ class UsersService {
 
   async update(guid, changes) {
     const userIndex = this.users.findIndex((user) => user.guid === guid);
-    if (userIndex === -1) {
+    if (userIndex === -1){
       throw boom.notFound('User not found');
     }
     const usuario = this.users[userIndex];
@@ -59,7 +59,7 @@ class UsersService {
   async delete(guid) {
     const userIndex = this.users.findIndex((user) => user.guid === guid);
     if (userIndex === -1) {
-      throw new Error('Usuario no encontrado');
+      throw boom.notFound('User not found');
     }
     this.users.splice(userIndex,1);
     return { guid };

@@ -7,7 +7,6 @@ const { logErrors, errorHandler, boomErrorHandler  } = require('./middlewares/er
 const app = express();
 const port = 3001;
 
-
 app.use(express.json());
 
 //*Acceso a la capa de routing
@@ -16,8 +15,8 @@ routerApi(app);
 
 //*Uso de middlewares de errores, el orden es importante.
 app.use(logErrors);
+app.use(boomErrorHandler);
 app.use(errorHandler);
-app.use(boomErrorHandler)
 
 app.listen(port, () => {
   console.log(`App corriendo en el puerto ${port}`);
@@ -39,3 +38,4 @@ app.listen(port, () => {
 //       rta: 'Respuesta del servidor al endpoint del home',
 //     });
 //   });
+
