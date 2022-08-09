@@ -47,13 +47,13 @@ app.listen(port, () => {
 //*FUNCIONAMENTO A PROFUNDIDAD DE GET.
 
 //*Recibir parametros, en el requets solemos tener un objeto que se llama params que contiene todo lo que hemos agreado de parámetros. Usar destructuración para sacar los parámetros. Los endpoints que son espesificos deben ir antes de los que son dinamicos.
-//   app.get('/', (req, res) => {
-//     res.send('Respuesta del servidor a la ruta por defecto');
-//   });
+  app.get('/', (req, res) => {
+    res.send('Respuesta del servidor a la ruta por defecto');
+  });
 
-//   app.get('/home', (req, res) => {
-//     res.json({
-//       rta: 'Respuesta del servidor al endpoint del home',
-//     });
-//   });
+  // app.get('/home', (req, res) => {
+  //   res.json({
+  //     rta: 'Respuesta del servidor al endpoint del home',
+  //   });
+  // });
 
