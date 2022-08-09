@@ -78,7 +78,7 @@ Para el desarrollo de este curso se instalaran las siguientes librerias:
 
 1. Express
 2. Boom
-3. Joi 
+3. Joi
 4.
 5.
 
@@ -102,7 +102,7 @@ Express permite trabajar con el REQUEST.BODY de una forma más amigable. Express
 
 ---
 
-# Separación de responsabilidades (Single Responsability Principle)  
+# Separación de responsabilidades (Single Responsability Principle)
 
 Hace parte de los principios SOLID. En este caso *Single Responsability Principle* establece que es una mala practica tener código que hace de todo, es decir si una función tiene como nombre sumar, no debería en su cuerpo estar calculando integrales. Esto se puede llevar al plano de los archivos, routing, clases, modulos, servicios y más|.
 
@@ -165,17 +165,27 @@ Los servicios tienen la lógica del negocio y obtienen información por medio de
 4. Remover todos los console.log
 5. Seguridad (helmet)
 6. Testing
- 
-# CORS 
+
+# CORS
 Uno de los problemas más comunes es el problema de cors, es un problema muy común a la hora de conectar el **Back-end con el Front-end**.
 
 ### Cross.Origin Resource Sharing
-Significa que los servidores tienen una protección por defecto y es que solo aceptan peticiones desde su mismo origen. 
+Significa que los servidores tienen una protección por defecto y es que solo aceptan peticiones desde su mismo origen.
 
-Si las peticiones salen desde el mismo origen (localhost) el Backend acepta la petición, pero cuando se tienen diferentes origenes (clientes, un front o un movil). 
+Si las peticiones salen desde el mismo origen (localhost) el Backend acepta la petición, pero cuando se tienen diferentes origenes (clientes, un front o un movil).
 
-Insomnia o postamn y este tipo de herramientas nos abstraen de ver este error porque por debajo usan un proxy que cambia el origen. 
+Insomnia o postamn y este tipo de herramientas nos abstraen de ver este error porque por debajo usan un proxy que cambia el origen.
 
 ### Las formas de resolver el problema es la siguiente:
 
 
+# Deploy con heroku
+npm i -g heroku
+heroku --version
+heroku login
+heroku create
+git remote -v
+  "engines":{
+    "node": "14.x"
+  }
+Heroku local web 

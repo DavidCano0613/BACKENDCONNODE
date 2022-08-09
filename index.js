@@ -6,7 +6,7 @@ const { logErrors, errorHandler, boomErrorHandler  } = require('./middlewares/er
 const cors = require('cors')
 
 const app = express();
-const port = 3001;
+const port = process.env.PORT || 3001;
 
 app.use(express.json());
 
@@ -14,10 +14,10 @@ app.use(express.json());
 // app.use(cors());
 
 //*Asi se da acceso solo a los que se supone que se contemplan
-const whiteList = ['http://localhost:8080'] //*Tambien podrian ponerse dominios 
+const whiteList = ['http://localhost:8080'] //*Tambien podrian ponerse dominios
 const options = {
   origin: (origin,callback)=>{
-    if(whiteList.includes(origin)){
+    if(whiteList.includes(origin) || !origin){
       callback(null,true)
     } else{
       callback(new Error("No estas autorizado"))
