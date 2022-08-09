@@ -10,7 +10,7 @@
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
-  "author": "",
+  "author": "Juan David Paniagua Cano",
   "license": "ISC",
   "devDependencies": {
     "eslint": "^8.20.0",
