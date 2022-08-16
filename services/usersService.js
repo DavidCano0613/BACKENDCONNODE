@@ -1,5 +1,6 @@
 const { dataBase } = require('../database.js');
 const boom = require('@hapi/boom');
+const { models } = require('./../libs/sequelize.js');
 class UsersService {
   constructor() {
     this.users = [];
@@ -17,54 +18,38 @@ class UsersService {
   }
 
   async find() {
-    return new Promise((resolve,reject) => {
-      setTimeout(() => {
-        resolve(this.users);
-      }, 5000);
-    });
+    const response = await models.User.findAll();
+    return response;
+    // return new Promise((resolve, reject) => {
+    //   setTimeout(() => {
+    //     resolve(this.users);
+    //   }, 5000);
+    // });
   }
 
-  async findOne(guid) {
-   const user = this.users.find((usuario) => usuario.guid === guid);
-    if (!user){
-      throw boom.notFound('User not found');
-    };
+  async findOne(id) {
+    const user = await models.User.findByPk(id)
+    if(!user) throw boom.notFound('user not found');
     return user;
   }
 
   async create(data) {
-    const newUser = {
-      guid: (Math.random()*20),
-      ...data,
-    };
-    this.users.push(newUser);
+    const newUser = await models.User.create(data);
     return newUser;
   }
 
-  async update(guid, changes) {
-    const userIndex = this.users.findIndex((user) => user.guid === guid);
-    if (userIndex === -1){
-      throw boom.notFound('User not found');
-    }
-    const usuario = this.users[userIndex];
-    this.users[userIndex] = {
-      ...usuario,
-      ...changes,
-    };
-    return this.users[userIndex];
+  async update(id, changes) {
+    const user = await this.findOne(id)
+    const updated = await user.update(changes);
+    return updated
   }
 
-  async delete(guid) {
-    const userIndex = this.users.findIndex((user) => user.guid === guid);
-    if (userIndex === -1) {
-      throw boom.notFound('User not found');
-    }
-    this.users.splice(userIndex,1);
-    return { guid };
+  async delete(id) {
+    const user = await this.findOne(id);
+    await user.destroy();
+    return {id}
   }
 }
-
-
 
 module.exports = { UsersService };
 

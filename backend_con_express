@@ -1,23 +1,23 @@
 # CREACÍON DE UN BACKEND CON NODE JS
 
-## PASOS PARA CREAR UN BACKEND CON EXPRESS JS
+## PASOS PARA CREAR UN BACKEND CON NODE JS
 
-1. Elegir una arquitectura de software
+1. Elegir la arquitectura de software más adecuada para el caso.
 2. Configuración del entorno de desarrollo y de producción con buenas practicas.
 3. Instalación de la librerias que seran necesarias para el desarrollo del proyecto.
-4. Creación del servidor con express js
-5. Separar responsabilidades en carpetas como lo indique la arquitectura elegida:
+4. Creación del servidor con EXPRESS.JS
+5. Separar responsabilidades como lo indique la arquitectura elegida:
 6. Creación de la capa de routing.
 7. Creación de los middlewares.
 8. Creación de la capa de servicios.
-9. Establecer la capa de acceso a datos (_conexión con bases de datos_).
+9. Creación de la capa de librerias y establecer la conexión con bases de datos.
 10. Capa de seguridad, establecer todo lo relacionado con autenticación y autorización.
-11. Creación de pruebas y tests.
+11. Creación de pruebas.
 12. Deploy.
 
 ---
 
-# The Clean Architecture.
+# 1) The Clean Architecture.
 
 Es un estilo de arquitectura de software que funciona separando el software en capas.
 
@@ -36,48 +36,37 @@ De una forma más transparente:
 
 > Finalmente esta la capa de los clientes que seran todos los dispositivos conectados a esa API
 
-> Resumen del flujo: Los clientes se conectan con los controladores, estos asu vez se conectan con los servicios y los servicios se encargan de conectarse con las bases de datos o su respectiva fuente de información y realizar una lógica de negocio. 
+> Resumen del flujo: Los clientes se conectan con los controladores, estos asu vez se conectan con los servicios y los servicios se encargan de conectarse con las bases de datos o su respectiva fuente de información y realizar una lógica de negocio.
 
 ![](./assets/Captura%20de%20pantalla%202022-07-31%20170216.png)
 
 
 ---
+# 2) Configuración de entorno de etorno de desarrollo y de producción con buenas practicas:
 
-# Configuración de entorno de etorno de desarrollo y de producción con buenas practicas:
-
-Establecer una buena configuración servira para trabajar de una forma más apropiada. 
+Establecer una buena configuración servira para trabajar de una forma más apropiada.
 
 - Crear un buen **git ignore:** Este se coloca en el directorio raiz del proyecto:  https://www.toptal.com/developers/gitignore.
 - Configuración del editor de código: Es recomendable para que todos los desarrolladores tengan la misma configuración en su editor de código. **Tener la extensión editorconfig**. Se puede establecer una configuración que lo que haga sea formatear el editor de código para que todos trabajen de la misma manera.
-- Nodemon como servidor de desarrollo: Crear algunas tareas o scripts en el package json.
-- Linters:
+- Nodemon como servidor de desarrollo: Creaación algunas tareas o scripts en el package json.
+- Linters: Eslint
 - Pipelines:
-- Instalación de paquetes: npm i nodemon eslint eslint-config-prettier eslint-plugin-prettier prettier -D
 
-¿Qué es el archivo .gitignore?
-https://www.freecodecamp.org/espanol/news/gitignore-explicado-que-es-y-como-agregar-a-tu-repositorio/#:~:text=gitignore%20%2C%20es%20un%20archivo%20de,puedes%20crear%20un%20archivo%20global%20.
-
-¿Porqué configurar el editor de código?
-https://www.kodetop.com/editorconfig-para-configurar-tu-editor-de-codigo/
-
-¿Que es linting?
-https://kb.rolosa.com/que-es-un-linter/
-
-Scrips de npm
-https://lenguajejs.com/npm/administracion/scripts-de-npm/
-
-Todo sobre el package json
-https://medium.com/noders/t%C3%BA-yo-y-package-json-9553929fb2e3
-
+### Instalación de paquetes: npm i nodemon eslint eslint-config-prettier eslint-plugin-prettier prettier -D
 
 ---
 # Instalación de la librerias que seran necesarias para el desarrollo
 
 Para el desarrollo de este curso se instalaran las siguientes librerias:
 
-1. Express
-2. Boom
-3. Joi
+1. Express: npm i express
+2. Boom: npm i @hapi/boom
+3. Joi:
+npm install --save joi
+npm install --save-dev @types/joi
+4. pg: npm i
+5. cors: npm i
+6. sequelize: npm i
 
 ---
 
@@ -88,12 +77,13 @@ EXPRESS: Es una libreria que permite gestionar de una mejor manera un servidor w
 La instacia de express trae en forma de función los métodos/verbos http.
 **get post put patch y delete**.
 
-A estas funciones se les puede pasar los paths (_URLS,Endpoints_) a los cuales los clientes van a atacar con los verbos http, esto se puede entender de la siguiente forma:
->El método http recibe dos parametros la URL y una función de tipo callback que ejecuta cierta lógica de programación CUANDO se ataque a ese endpoint. El callback recibe dos objetos que son *REQUEST AND RESPONSE*.
+A estas funciones se les puede pasar los paths (_URLS,Endpoints_) que no son más que un punto final en el servidor a los cuales los clientes van a atacar con los verbos http y un handler que se ejecuta cuando la ruta coincide. Esto se puede entender de la siguiente forma:
 
-Los objetos **request y response** son muy importante puesto que por medio de estos es que se envía y recibe información. En el curso de Node js se amplifica que propiedades y métodos contienen estos objetos y para que sirven.
+>El método http recibe dos parametros la URL y una función de tipo callback llamada handler que ejecuta cierta lógica de programación CUANDO se ataque a ese endpoint. Este callback recibe dos objetos que son *REQUEST AND RESPONSE*.
 
-Express permite trabajar con el REQUEST.BODY de una forma más amigable. Express contiene algo llamado *parser* que ayuda a tomar el body que viene en forma de un stream y _parsearlo_ a algun tipo de dato, ya sea un archivo de texto, un json o lo que sea. Lo más usual es parsearlo a JSON.
+Los objetos **request y response** son muy importante puesto que por medio de estos es que se recibe y envia la información.
+
+Express permite trabajar con el REQUEST.BODY de una forma más amigable. Express contiene algo llamado *parser* el cual es un middleware que ayuda a tomar el body que viene en forma de un stream y _parsearlo_ a algun tipo de dato, ya sea un archivo de texto, un json o lo que sea. Lo más usual es parsearlo a JSON. Este se puede establecer en el index de forma global.
 
 ---
 
@@ -101,11 +91,10 @@ Express permite trabajar con el REQUEST.BODY de una forma más amigable. Express
 
 Hace parte de los principios SOLID. En este caso *Single Responsability Principle* establece que es una mala practica tener código que hace de todo, es decir si una función tiene como nombre sumar, no debería en su cuerpo estar calculando integrales. Esto se puede llevar al plano de los archivos, routing, clases, modulos, servicios y más|.
 
-
 ---
 # Creación de la capa de routing
 
-Como se menciono the clean architecture establece que el routing hace parte de la capa de acceso a los servicios y también se encarga de proporcionar los EndPoints a los cuales los clientes se van a conectar para acceder a estos recursos. Sin embargo es una pesima practica definir todo el routing en el archivo index donde se levanta el servidor.
+Como se menciono the clean architecture establece que el routing hace parte **de la capa de acceso a los servicios** y también se encarga de proporcionar los EndPoints a los cuales los clientes se van a conectar para acceder a estos recursos. Sin embargo es una pesima practica definir todo el routing en el archivo index donde se levanta el servidor.
 
 Los routers en express son middlewares que permiten agrupar rutas para así separar la lógica de los endpoints.
 
@@ -113,44 +102,68 @@ De acuerdo con el Single Responsability Principle todo el routing deberia dividi
 
 El nombre que se le dan a estos archivos dependen del equipo de desarrollo.
 
-Se debe definir un path principal para ese router, es decir debe tener como su entorno propio
+Se debe definir un path principal para ese router, es decir debe tener como su entorno propio.
+
 ---
 # Creación de los middlewares
 
-### Que son los middlewares y para que sirven
+## Que son los middlewares y para que sirven
 
-Como se ha observado anteriormente en los Endpoints se establece cierta lógica. Pero que tal si se necesita ejecutar una función antes de que se ejecuta la lógica del endpoint?
+Como se ha observado anteriormente en los Endpoints se establece cierta lógica. Pero ¿que tal si se necesita ejecutar una función antes de que se ejecute la lógica del endpoint, como por ejemplo, validar permisos o validar que la data venga como se espera?
 
-Los middlewares sirven para eso y es porque son funciones que se ejecutan de forma previa a la lógica que hay en el Endpoint. 
+Los middlewares sirven para eso porque son FUNCIONES que se ejecutan de **FORMA PREVIA** es muy importante hacer esta notación y es que el middleware **siempre se ejecuta antes de todos los handlers de los endpoints**. Es decir, antes de que la petición llegue al endpoint y se ejecute la lógica que tiene el handler asociado a este, se ejecuta primero el middleware.
+
+## Sintaxis
+Se crea una función normal con la logica que va contener ese middleware, luego ya sea a nivel de toda la app o de un grupo de endpoints espesificos se llama al método USE
+Express dispone del **método use()** el cual recibe como parametro el **request y el response** y un método muy importante llamado **next** el cual se explica despues de las propidades de los middlewares. Entonces en ese orden de ideas los middlewares se crean asi:
+
+- algo.use(): Esto se va ejecutar primero cuando se ataque a cualquier endpoint con cualquier método sea get post etc...
+- algo.get()
+- algo.post()
+- algo.patch()
+
+## Propiedades de los middlewares en express JS
+
+1. **El orden es importante:** Los middlewares se ejecutan en el mismo orden que se llamen en el código
+
+2. **Pueden ser utilizados de forma global:** Ejemplo: para capturar errores a nivel general en toda la aplicación, en este caso pueden  ponerse en el expressApp.
+
+3. **Pueden ser utilizados a nivel de cada endpoint o de un grupo de endpoints:** De estar forma el middleware una vez se ejecuta, llama a la función del endpoint al que se haya atacado. Esto también lo hace next()
+
+4. **Funcionan de forma secuencial** Una de sus propiedades es que pueden funcionar de forma secuencial. Cada middleware puede tener una función  espesifica, una vez termine... sigue el otro middleware con otra lógica diferente. Es como tener funciones tradicionales conectadas en cadena, se ejecuta una y le pasa el flujo a la siguiente y asi sucesivamente. Un middleware puede bloquear, Es decir si cierta lógica no se cumple no se permite seguir con el siguiente middleware o no permite acceder a la siguiente capa, esto viene muy bien a la hora de hacer validaciones.
+
+5. **El método Next():** El método NEXT (que también viene como parámetro en el use()) es un callback que permite que el siga el proximo middleware o en su defecto el proximo handler que tenga el endpoint al que se ha atacado **(Hay un dilema y es que express no diferencia muy bien entre middlewares y rutas, practicamente las funciones (handlers) que se ejecutan en las rutas son middlewares también)**.
+## Uses Cases
+- Funcionan como pipes
+- Validan datos
+- Capturan errores
+- Validan permisos
+- Controlan accesos
+
+## Middleware de tipo error.
+Es ideal que antes de que la petición llegue al endpoint se capturen los posibles errores. Sin embargo, estos no deben devolverse a secas. Los errores hay que gestionarlos, darles un formato y mandarlos de una forma clara y bien presentada al cliente.
 
 ### Sintaxis
-Express dispone del método use() el cual recibe como parametro el request y el response y un método muy importante llamado next el cual se explica despues de las propidades de los middlewares. 
+Tienen el parámetro error de primero **(error,req,res,next).**
 
-### Propiedades de los middlewares en express JS
+Es util para crear un middleware GLOBAL (es decir que funciones a nivel de todos los endpoints) que acompañe a todas las peticiones de tal manera de que si sale un error este se capture y se le de un formato para retornalo, **¿que formato?** _ejemplo: como el tipo de error el codigo de estado y un mensaje._ este primero que todo y luego se siga con lo demas
 
-1. **Pueden ser utilizados de forma global:** Ejemplo: para capturar errores a nivel general en toda la aplicación. 
+Este tipo de middlewares se deben crear despues de hacer todo el Routing.
+Este tipo de middlewares se crean en un carpeta se llaman donde se requiran y se ponen también en el routing.
 
-2. **Pueden ser utilizados a nivel de cada endpoint o de un grupo de endpoints:** De estar forma el middleware una vez se ejecuta, llama a la función del endpoint al que se haya atacado. Esto también lo hace next()
+### Libreria boom
+Esta libreria ayuda a gestionar de forma más eficiente lo errores. Pues hasta el momento se ha enviado el status code, message, entre otros de forma que siempre se debe poner el status code manualmente. Boom ayuda a ahorrar esta molestia.
 
-3. **Funcionan de forma secuencial** Una de sus propiedades es que pueden funcionar de forma secuencial. Cada middleware puede tener una función  espesifica, una vez termine... sigue el otro middleware con otra lógica diferente. Es como tener funciones tradicionales conectadas en cadena, se ejecuta una y le pasa el flujo a la siguiente y asi sucesivamente. Un middleware puede bloquear, Es decir si cierta lógica no se cumple no se permite seguir con el siguiente middleware.
- 
-4. **El método Next():** El método NEXT (que también viene como parámetro) es un callback que permite que el siga el proximo middleware o en su defecto la proxima función callback que tenga el endpoint al que se ha atacado **(Hay un dilema y es que express no diferencia muy bien entre middlewares y rutas, practicamente las funciones que se ejecutan en las rutas son middlewares también)**.
+isBoom: Si es un error de tipo boom
+output: Toda la informacion del error
+
+#### Ventajas de usar Boom:
+- Ayuda a no tener que poner el status code de forma manual
+- Gestiona mejor los errores
 
 
-### Uses Cases
-- Funcionan como pipes
-- Validar datos
-- Capturar errores
-- Validar permisos
-- Controlar accesos
 
-### Middleware de tipo error.
-Tienen el parámetro error de primero.
-Es util para crear un middleware global que acompañe a todas las peticiones de tal manera de que si sale un error se capture este primero que todo y luego se siga con lo demas
-
-Este tipo de middlewares se deben crear despues de hacer todo el Routing
-
-### Middleware de tipo validación
+## Middleware de tipo validación
 Otro uso muy común de los middlewares es validar los datos que vienen desde el cliente(front-end). Para esto existe una librería llamada Joi.
 
 Como backend un desarrollador debería asgurarse de que lo que le envia el front-end cumple con la integridad de datos, que un precio este un formato adecuado o por ejemplo que se envien los atributos que se esperan, con los middlewares se pueden capturar este tipo de errores antes de que lleguen a la capa de servicios.
@@ -202,13 +215,180 @@ https://git.heroku.com/peaceful-headland-45148.git
 
 
 ---
+# CAPA DE librerias
+Estan se encargan de todo lo que tiene que ver con conexión con terceros, es en esta carpeta donde se crean todos los archivos que se encargan de conectar a la back-end con terceros como **Bases de datos** y **APIS**
+
+
 # CONEXIÓN A BASE DE DATOS
+Existen diversas formas de conectar el backend con bases de datos
+
+1. La más común, por lo menos para empezar a entender el como gestionar información de una base de datos desde el backend es descargando un SGDB y buscando la libreria que permite conectar a Node js con dicho motor.
+
+> Conexión con POSTGRESQL: Para conectar Node JS con una base de datos pg: https://node-postgres.com/
+> Conexión con MYSQL: Para conectar Node JS con una base de datos mysql: https://node-postgres.com/
+> Conexión con SQLSERVER: Para conectar Node JS con una base de datos sqlserver: https://node-postgres.com/
+
+## Pooling
+Cuando se trabaja con bases de datos en el backend, cada vez que se hace una operación contra la misma, antes se debe generar una conexión con la base de datos. Por lo que tener que llamar al método que conecta la base de datos con el backend por cada vez que se quiere hacer una operación se vuelve muy tedioso. Ademas, eso esta mal porque puede sobrecargar el servidor de request. Entonces, esto es un problema porque por cada request se crea una negociacion con la base de datos, se tarda 20ms o mas, y asi se va saturando el servidor. Por lo tanto SGDB proporcionan una interfaz llamada pool.
+
+Un pool de conexiones basicamente es un conjunto limitado de conexiones a una base de datos, que es manejado por un servidor de aplicaciones de forma tal, que dichas conexiones pueden ser reutilizadas por los diferentes usuarios. Es como un lugar en el que se centralizan estas conexiones para no tenerlas que estar llamando cada vez, si no desde el pool. Lo que hace el pool es sencillamente es ser un mediador entre las bases de datos y el cliente. Entonces a medida que los clientes empiecen a hacer consultas, la aplicacion de manera asincrona conectara con el pool y el pool se encargara tanto de abrir o cerrar conexiones para que la informacion siga trabajando de manera eficiente.
+![](./assets/OOFTe.png)
 
 
 ---
+
+# ORM: Object-Relational mapping
+
+
+Un ORM es un modelo de programación que permite mapear las estructuras de una base de datos relacional en entidades de la programación orientada a objetos. Es decir, el ORM toma las tablas y las convierte en POO. Es como usar programación orientada a objetos para hacer operaciones contra la base de datos. El ORM es agnostico, pues este se puede usar en cualquier SGDB.
+
+Al abstraer este tipo de programación, se delega su implementación al Backend, es decir, le añadimos una de responsabilidad a la capa transaccional del servidor:
+.
+✨Los beneficios son los siguientes:
+
+Acciones como CRUD (Create, Read, Update, Delete) son administradas mediante ORM.
+La implementación de seeds o semillas, nos permiten recuperar, mediante código, la estructura de una BD.
+.
+Una de las bases teóricas para entender este modelo es mediante el conocimiento de DAO (Data Access Object) y DTO (Data Transfer Object), los cuales nos permiten desestructurar un ORM en módulos de abstracción para acceder a la DB y transferir datos desde la misma DB, respectivamente hablando.
+.
+🙃Los contras serían:
+
+Delegación de responsabilidades al server
+Descentralización de trabajo, directa, de una BD.
+
+
+## SEQUELIZE
+* npm install --save sequelize
+# Instalar segun la base de datos a utilizar:
+* npm install --save pg pg-hstore
+* npm install --save mysql2
+* npm install --save sqlite3
+* npm install --save tedious // MSSQL
+
+## Caracteristicas de Sequelize
+Sequelize gestiona la conexión con la base de datos.
+
+## Como funciona Sequelize ORM
+
+Lo primero que estamos haciendo es importar la clase Sequelize despues lo que se hace es crear una nueva instancia de esta clase que recibe como parámetros en su constructor, el nombre de la base de datos, el nombre del usuario, la contraseña, y un objeto de configuración donde especificamos el host de nuestra base de datos, el dialect que es donde ponemos que base de datos se esta utilizando.
+
+
+## Modelos
+
+Los modelos en sequelize nos permiten representar nuestras tablas y manipular estos datos, un modelo se define de la siguiente manera:
+
+https://ed.team/blog/agiliza-tu-desarrollo-en-nodejs-con-el-orm-sequelize
+https://runebook.dev/es/docs/sequelize/manual/model-basics#:~:text=Un%20modelo%20es%20una%20abstracci%C3%B3n,y%20sus%20tipos%20de%20datos).
+
+
+
+---
+# VARIABLES DE AMBIENTE / ENTORNO
+Las variables de entorno son variables dinamicas que afectan a el comportamiento de una aplicación y son usadas cuando una aplicación corre en diferentes entornos, por ejemplo, el de desarrollo o el de producción.
+
+## USOS MÁS COMUNES:
+1. Almacenar información sensible
+2. Para aplicar configuraciones que sean espesificas para entornos de desarrollo
+3. Para despliegue
+
+Cuando se crean aplicaciones con Node JS del lado del back-end es muy usual conectarse a servicios de terceros, ejemplos:
+
+* Bases de datos: Cuando se establece una conexión a una base de datos desde un back-end se debe ingresar la información necesaria para hacer de forma exitosa dicha conexión, información como el usuario de la base de datos, la contraseña, el host, el puerto entre otros.
+
+* APIS de terceros: Estos servicios brindan un token y client_id que sirven para conectarse a estos servicios.
+
+## Formas de crear las conexiones
+> Tipeando de forma directa: Una forma de hacer estas conexiones es tipeando de forma explicita en el código, en otras palabras quemando los datos, todos esos datos **LOS CUALES POR SUPUESTO SON MUY SENSIBLE** y por lo tanto es una **pesima** practica hacerlo de esta forma. Al publicar esto en un repositorio todo el mundo tiene acceso a esta información.
+
+> Usando variables de entorno: Estas le añaden una capa de seguridad al código dado que ya no muestra los datos de forma quemada.
+
+
+## Uso de variables de entorno en Node JS
+
+### Archivo .env y .env.example
+
+### process.env:
+process.env es un objeto **GLOBAL** que contiene como propiedades todas las variables de entorno
+
+Se deben separar debido a que en el .env existe información sensible. Sin embargo, es necesario mostrar cuales son esas variables de etorno, por lo tanto, en el .env.example se ponen como un ejemplo de cuales son sin ponerlas de forma explicita.
+
+Es un archivo que va contener todas las variables de entorno:
+- Instalar el modulo dotenv
+- Crear la carpeta config
+- Crear el archivo .env
+- Crear el archivo .env.example
+- **No se debe subir el repositorio el .env**
+- **Se pone en el repositorio el .env.example**
+- Todas se escriben en UPPERCASE
+- Si hay varias palabras se separan por _
+- Creación de de las variables de entorno
+- Crear el script
+
+
+
+
+
+
+
+
+## CON DOCKER
+- Configurar docker con bases de datos
+- Crear el archivo docker-compose.yml
+
+### Comandos
+- docker-compose up -d postgres
+- docker-compose ps
+- docker-compose down
+
+## Explorando la base de datos del contenedor
+Son formas de manipular la
+### Con terminal
+-docker-compose exec postgres bash: Terminal
+-ls -l
+-psql -h localhost -d my_store -U admin
+- \d+
+- \1
+
+### Con motores graficos:
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 ### PARA APRENDER
+-Serie de videos de buenas practicas hacker nomada de node js
 - Tareas en segundo plano para no sobrecargar el servidor
 - Tareas en cola - Queu task
-- Web kocks 
+- Web kocks
 - Documentar con swager
 - Patrones de diseño (observador, mediador, inyección de dependencias, factory, builder, singelton, estrategia, estado)
+
+

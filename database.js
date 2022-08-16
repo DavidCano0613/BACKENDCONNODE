@@ -3,7 +3,7 @@ const dataBase = [
     _id: '62e2c914942dbc6051a2d00f',
     index: 0,
     guid: '49cdb5fd-3f71-41a5-9741-86ec09d6e1a7',
-    isActive: false,
+    isActive: true,
     balance: '$2,513.29',
     picture: 'http://placehold.it/32x32',
     age: 38,
@@ -4042,5 +4042,4 @@ const dataBase = [
   },
 ];
 
-
-module.exports = {dataBase}
+module.exports = { dataBase };
