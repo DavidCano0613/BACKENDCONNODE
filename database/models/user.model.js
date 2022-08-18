@@ -1,8 +1,8 @@
 const { user } = require('pg/lib/defaults');
 
-const {Model , DataTypes , Sequelize} = require('sequelize');
+const {DataTypes , Sequelize, Model } = require('sequelize');
 
-//*Construcción de una tabla
+//*Construcción de un modelo (tabla)
 
 //*Nombre de la tabla
 const USER_TABLE = 'users';
@@ -12,8 +12,8 @@ const UserSchema = {
   id: {
     type: DataTypes.INTEGER,
     primaryKey: true,
-    allowNull: false,
     autoIncrement: true,
+    allowNull: false,
   },
   email: {
     type: DataTypes.STRING,
@@ -35,11 +35,12 @@ const UserSchema = {
 
 //*Gracias a la extensión de este modelo tiene todas las formas de hacer queries
 
-class User extends Model{
-  //*Para acceder a metodos sin crear una instancia
+class User extends Model {
+  //*static: Para acceder a metodos sin crear una instancia
   static associate(){
-    //*Models
+    //*Para relaciones
   }
+
   //Configuración por defecto
   static config(sequelize){
     return {

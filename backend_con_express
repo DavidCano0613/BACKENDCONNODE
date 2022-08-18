@@ -1,19 +1,19 @@
 # CREACÍON DE UN BACKEND CON NODE JS
 
-## PASOS PARA CREAR UN BACKEND CON NODE JS
+## PASOS PARA CREAR UN BACKEND
 
 1. Elegir la arquitectura de software más adecuada para el caso.
-2. Configuración del entorno de desarrollo y de producción con buenas practicas.
-3. Instalación de la librerias que seran necesarias para el desarrollo del proyecto.
+2. Configurar del entorno de desarrollo y de producción con buenas practicas.
+3. Instalar las librerias que seran necesarias para el desarrollo del proyecto.
 4. Creación del servidor con EXPRESS.JS
-5. Separar responsabilidades como lo indique la arquitectura elegida:
-6. Creación de la capa de routing.
-7. Creación de los middlewares.
-8. Creación de la capa de servicios.
-9. Creación de la capa de librerias y establecer la conexión con bases de datos.
-10. Capa de seguridad, establecer todo lo relacionado con autenticación y autorización.
-11. Creación de pruebas.
-12. Deploy.
+5. Separar responsabilidades como lo indique la arquitectura elegida
+6. Crear la capa de routing.
+7. Crear la capa de middlewares.
+8. Crear la capa de servicios.
+9. Crear la capa de librerias y establecer la conexión con bases de datos.
+10. Crear la capa de seguridad, establecer todo lo relacionado con autenticación y autorización.
+11. Crear y correr de pruebas.
+12. Hacer deploy.
 
 ---
 
@@ -33,10 +33,9 @@ Imagen:
 De una forma más transparente:
 ![](./assets/Captura%20de%20pantalla%202022-07-31%20140441.png)
 
+> Finalmente esta la capa de los clientes que seran todos los dispositivos conectados a esa API.
 
-> Finalmente esta la capa de los clientes que seran todos los dispositivos conectados a esa API
-
-> Resumen del flujo: Los clientes se conectan con los controladores, estos asu vez se conectan con los servicios y los servicios se encargan de conectarse con las bases de datos o su respectiva fuente de información y realizar una lógica de negocio.
+> Resumen del flujo: Los clientes se conectan con los controladores, estos a su vez se conectan con los servicios y los servicios se encargan de conectarse con las bases de datos o su respectiva fuente de información y realizar una lógica de negocio.
 
 ![](./assets/Captura%20de%20pantalla%202022-07-31%20170216.png)
 
@@ -52,7 +51,8 @@ Establecer una buena configuración servira para trabajar de una forma más apro
 - Linters: Eslint
 - Pipelines:
 
-### Instalación de paquetes: npm i nodemon eslint eslint-config-prettier eslint-plugin-prettier prettier -D
+### Instalación de paquetes:
+npm i nodemon eslint eslint-config-prettier eslint-plugin-prettier prettier -D
 
 ---
 # Instalación de la librerias que seran necesarias para el desarrollo
@@ -266,12 +266,12 @@ Descentralización de trabajo, directa, de una BD.
 * npm install --save tedious // MSSQL
 
 ## Caracteristicas de Sequelize
-Sequelize gestiona la conexión con la base de datos.
+Sequelize gestiona la conexión con la base de datos. Una de las bases teóricas para entender este modelo es mediante el conocimiento de DAO (Data Access Object) y DTO (Data Transfer Object), los cuales nos permiten desestructurar un ORM en módulos de abstracción para acceder a la DB y transferir datos desde la misma DB, respectivamente hablando.
 
-## Como funciona Sequelize ORM
-
+## Instalación y configuración
 Lo primero que estamos haciendo es importar la clase Sequelize despues lo que se hace es crear una nueva instancia de esta clase que recibe como parámetros en su constructor, el nombre de la base de datos, el nombre del usuario, la contraseña, y un objeto de configuración donde especificamos el host de nuestra base de datos, el dialect que es donde ponemos que base de datos se esta utilizando.
 
+Sequelize permite utilizar consultas de forma directa con sql:
 
 ## Modelos
 
@@ -279,6 +279,17 @@ Los modelos en sequelize nos permiten representar nuestras tablas y manipular es
 
 https://ed.team/blog/agiliza-tu-desarrollo-en-nodejs-con-el-orm-sequelize
 https://runebook.dev/es/docs/sequelize/manual/model-basics#:~:text=Un%20modelo%20es%20una%20abstracci%C3%B3n,y%20sus%20tipos%20de%20datos).
+
+
+
+## Consultas
+
+## Cambio de base de datos
+
+## Migraciones
+
+
+
 
 
 

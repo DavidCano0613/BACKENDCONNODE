@@ -1,8 +1,5 @@
-// Este archivo se va encargar de enviar la conexción hacia lo modelos para poder hacer todos los mapeos
-
-// van a estar toda la ocnfiguracíon y el setup inicial de sequelize con los modelos
-
-
+//* Este archivo se va encargar de enviar la conexión hacia lo modelos para poder hacer todos los mapeos
+//* van a estar toda la configuración y el setup inicial de sequelize con los modelos
 
 const {User,UserSchema} = require('./user.model.js');
 
