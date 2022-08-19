@@ -281,16 +281,9 @@ https://ed.team/blog/agiliza-tu-desarrollo-en-nodejs-con-el-orm-sequelize
 https://runebook.dev/es/docs/sequelize/manual/model-basics#:~:text=Un%20modelo%20es%20una%20abstracci%C3%B3n,y%20sus%20tipos%20de%20datos).
 
 
-
 ## Consultas
-
 ## Cambio de base de datos
-
 ## Migraciones
-
-
-
-
 
 
 ---
@@ -339,9 +332,6 @@ Es un archivo que va contener todas las variables de entorno:
 
 
 
-
-
-
 ## CON DOCKER
 - Configurar docker con bases de datos
 - Crear el archivo docker-compose.yml
@@ -363,10 +353,92 @@ Son formas de manipular la
 ### Con motores graficos:
 
 
+---
 
 
+# AUTENTICACIÓN Y AUTORIZACIÓN || A
+Una de las tareas mas comunes en backend es hacer autenticación y autorización ambos conceptos diferentes,
+
+## Autenticacion:
+Es la acción de validar quien es quien, de cara al sistema se valida que usuario esta en la app.
+
+El sistema de autenticación mas basico es _email-password_,
+
+### Passwords
+Una contraseña debe exigirse (con ciertas matices) que tenga una buena seguridad.
+En la base de datos la contraseña nunca debe ir en texto plano. **¿Porque?** el hecho es que si se tiene acceso a la base de datos por alguna razón se puede suplantar la identidad de una persona.
+
+Lo ideal es guardar las contraseñas en otro formato para que la suplantación sea lo mas dificil posible. Para realizar esta tarea se hace uso de un **Hash** que no es mas que un texto plano que se pasa por una función y genera una clave llamada **criptografica**. Esa funcion tiene la facultad de que si no se vuelve aplicar el mismo texto plano sobre esa funcion, el hash jamas va a coincidir.
+
+Ademas con el hash no se puede quitar el texto plano, es decir, _no se puede ir de hash a texto plano_. No hay forma de coger el hash y convertirlo a texto plano si no se tiene el texto plano (la clave correcta) sencillamente no se puede sacar el hash.
+
+bbtenemos el email y password desde el body usualmente en api rest
+//comparo contra la base de datos si coninciden los datos pasados con lo de la base de datos, falle el email o password, se retorno que no esta autenticado.
+
+### Status codes
+- 401 no autenticado - no authorized
+- 403 no autorizado -  forbidden
 
 
+## Autorización:
+Se suele asociar a un rol, es decir llegado a cierto punto se suele chekear si se tiene un rol u otro. puies cada rol tendra acceso a ciertas cosas y otros no.
+
+
+## SESIÓN VS TOKEN:
+Son dos de los mecanismos de autenticación mas usados. No hay un estandar ni una unica forma de usarlos, se implementa uno u otro dependiendo de las necesidades.
+
+## AUTENTICACIÓN POR SESIÓN:
+Un cliente hace una solicitud a un _Endpoint de login_.
+Esto le sirve al servidor (al menos por primera vez) para mostrarle que el cliente es quien dice ser.
+
+El login es primer punto de autenticación, posteriormente para que no se tenga que estar enviando información de autenticación (correo y clave) una y otra vez...., el servidor intenta devolver algo para identificarse con este cliente sin que este, se mantenga enviando correo y clave constantemente. Ese algo es una **SESIÓN**
+
+**La sesión funciona así:** El cliente se loggea y si todo es valido, el servidor genera un objeto que contiene información a este se le llama sesion.
+
+Esta sesion tiene un identificador **unico** y guarda esa información (Este detalle es muy importante) donde el desarrollador lo delegue, ya sea en una base de datos, en memoria etc.. Esta información se le ve agregando nueva información conforme el cliente vaya interactuando con el servidor.
+
+## Stateful:
+La autenticación de tipo sesion es stateful dado que conforme el usuario va interactuando con mas endpoints, se va actualizando ese objeto sesion.
+
+El servior habitualmente mete la sesion-id en una cabecera especial llamada **cookie**.
+
+La cookie se guarda en el navegador.
+
+Lo que va hacer esta cabecera **cookie** es que cuando el servidor la devuelva esta se setea en el navegador.
+
+La cookie permite que cuando se haga una **petición** al dominio que creo esa cookie, se le envie esta de forma automatica. Ese comportamiento es nativo del navegador.
+
+## Ejemplo:
+Un cliente se loggea en un E-Commerce. En ese momento se crea la sesión, si el cliente pulsa en añadir un producto en esa solicitud el navegador metera en esa cabecera cookie el sesion id que le ha venido previamente. El servidor lo que hara consecuentemente es verificar si ese sesion id esta relacionado con la tabal de sesiones o donde sea que este guardado. Asi el servidor tiene constancia de quien esta autenticado y quien no.
+
+
+## AUTENTICACIÓN POR TOKEN
+Este mecanismo comienza igual, todo parte de una comunicación cliente-servidor. La diferencia contundente aqui es como actua el servidor.
+
+El servidor comprueba el email, la contraseña o lo que sea y genera un **TOKEN**. basado en el id del usuario y cierta información que se le quiera añadir a ese token y un **SECRETO** que solo conoce el servidor.
+
+En base a ese secreto y a la información que se quiere guardar en el token se genera el mismo.
+
+El token tiene información del usuario la sesion no.
+El servidor devuelve el token en el body usualmente.
+
+El navegador debe guardar este token en algun sitio, localstorage o como sea.
+
+Cuando el navegador envia devuelta una solicitud mete en una cabecera llamada authorization ese token, el servidor toma el token y comprueba con el secreto si ese token ha sido generado por el. Es como una huella, entonces el servidor compara ese token con el secreto para mirar que no haya ninguna anormalidad, no ha caducado ni ha sido alterado. Esto es clave porque aqui es servidor no guarda información de ningun tipo, por eso se denomina Stateless.
+
+## Stateless
+No se tiene un seguimiento de lo que va haciendo el usuario dado que no se tiene una sesión.
+
+![](./)
+
+
+# DIFERENCIAS
+
+> En la sesión solo tenemos un id y ya || El token si puede tener información dentro desde el servidor
+
+> La forma de enviarlo: La sesión si se usa el método de cookie entonces el envio al backend es automatico. El envio del token es manual por medio de la cabecera.
+
+> Validación menos segura en sesión || El token es más seguro por que tiene un secreto.
 
 
 
