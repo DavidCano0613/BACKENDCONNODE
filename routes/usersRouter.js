@@ -1,5 +1,4 @@
 const express = require('express');
-const { UsersService } = require('../services/usersService.js');
 const usersRouter = express.Router();
 const validatorHandler = require('../middlewares/validatorHandler.js')
 const {
@@ -7,8 +6,9 @@ const {
   createUserSchema,
   updateUserSchema,
 } = require('../schemas/usersSchemas.js');
+const { UsersService } = require('../services/usersService.js');
 
-// No va correr de forma generica es decir de forma para todos en general, si no que cada endopoint debe definir su esquema como sado los datos de validación diferente y por lo tanto se debe definir en cada uno
+// No va correr de forma generica es decir de forma para todos en general, si no que cada endopoint debe definir su esquema como sado los datos de validación diferente y por lo tanto se debe definir en cada uno.
 
 const userService = new UsersService();
 

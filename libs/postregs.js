@@ -1,7 +1,7 @@
 const { Client } = require('pg')
 
-//*Creación de función asincrona para establecer la conexión.
-const getConnection = async ()=> {
+//*Establecer la conexión por medio de una función asincrona.
+const getConnection = async () => {
   const client =  new Client({
     host: 'localhost',
     port: 5432,
@@ -9,9 +9,12 @@ const getConnection = async ()=> {
     password: '123456',
     database: 'my_store'
   });
+
+  //*La conexión da también como retorno una promesa.
   await client.connect()
-  //*Se debe retornar el client para el que lo reciba pueda ejecutar consultas
+
+  //*Se debe retornar el client para el que lo reciba pueda ejecutar consultas.
   return client;
 }
 
-module.exports = getConnection;
+module.exports = {getConnection};

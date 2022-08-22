@@ -7,7 +7,11 @@
     <title>Document</title>
 </head>
 <body>
+  <p id="p">Holaaaa</p>
     <script>
+    document.addEventListener('keyup',(evento)=>{
+      if(evento.key === "f") return console.log("Presionaste la f")
+    })
 
     </script>
 </body>

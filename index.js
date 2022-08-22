@@ -1,21 +1,17 @@
 const express = require('express');
 const { routerApi } = require('./routes/index.js');
 const { logErrors, errorHandler, boomErrorHandler } = require('./middlewares/errorHandler.js');
-
 // const {} require('./schemas/usersSchemas.js')
-const cors = require('cors')
+const cors = require('cors');
 const app = express();
-
 const port = process.env.PORT || 3001;
 
 //*Middlewares para parsear el body
 app.use(express.json());
 
-
 //*CORS
 //*Le da acceso a todo el mundo
 // app.use(cors());
-
 //*Asi se da acceso solo a los que se supone que se contemplan
 const whiteList = ['http://localhost:8080'] //*Tambien podrian ponerse dominios
 const options = {

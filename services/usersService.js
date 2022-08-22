@@ -1,6 +1,9 @@
 const { dataBase } = require('../database.js');
 const boom = require('@hapi/boom');
+// const {getConnection}  = require('../libs/postregs.js');
+// const { pool }  = require('../libs/postgres.pool.js');
 const { models } = require('./../libs/sequelize.js');
+
 class UsersService {
   constructor() {
     this.users = [];
@@ -8,6 +11,8 @@ class UsersService {
     this.guid;
     this.name;
     this.favoriteFruit;
+    // this.pool = pool
+    // this.pool.on("Error",err => console.log(err));
   }
 
   generate() {
@@ -18,8 +23,20 @@ class UsersService {
   }
 
   async find() {
+    //Con el ORM
     const response = await models.User.findAll();
     return response;
+
+    //Con Postgres  nativo
+    // const client = await getConnection();
+    // const tasks = await client.query('SELECT * FROM tasks')
+    // return tasks.rows;
+
+    //Con un Pool.
+    // const query = 'SELECT * from tasks';
+    // const rta = await this.pool.query(query)
+    // return rta
+
     // return new Promise((resolve, reject) => {
     //   setTimeout(() => {
     //     resolve(this.users);
@@ -41,7 +58,7 @@ class UsersService {
   async update(id, changes) {
     const user = await this.findOne(id)
     const updated = await user.update(changes);
-    return updated
+    return updated;
   }
 
   async delete(id) {

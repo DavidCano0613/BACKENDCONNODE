@@ -1,26 +1,26 @@
 //*CONFIGURACIÓN Y CONEXIÓN CON LA DB
-
 //Requerimos la libreria como tal
 const { Sequelize } = require('sequelize');
-
-
 const { config } = require('../config/config.js');
+
+//
 const setupModels = require('./../database/models');
 
 const USER = encodeURIComponent(config.dbUser);
 const PASSWORD = encodeURIComponent(config.dbPassword);
 const URI = `postgres://${USER}:${PASSWORD}@${config.dbHost}:${config.dbPort}/${config.dbName}`;
 
+//Por detras el implementa la estrategia de Pooling.
 const sequelize = new Sequelize(URI,{
   dialect:'postgres',
   logging:true,
 });
 
-// Recibe la conexión
+//* Recibe la conexión
 setupModels(sequelize);
 
-// Para que haga la sincronización con los modelos
-sequelize.sync();
+//*Para que haga la sincronización con los modelos
+// sequelize.sync();
 
 module.exports = sequelize;
 
