@@ -186,218 +186,9 @@ Los servicios tienen la lógica del negocio y obtienen información por medio de
 # VARIABLES DE AMBIENTE / ENTORNO
 Tener archivos de configuraciones separados en diferentes ambientes es una buena practica. Cuando una aplicación web se va a a desplegar se esta hablando de que una aplicación se va usar al menos en dos ambientes diferentes. _Producción y desarrollo_.
 
-En las empresas grandes existen más entornos.
-
-Para cuyos casos es necesario para cada entorno crear sus respectivos archivos de configuración.
-
-Las variables de entorno son variables dinamicas que afectan a el comportamiento de una aplicación y son usadas cuando una aplicación corre en diferentes entornos, por ejemplo, el de desarrollo o el de producción.
-
-## USOS MÁS COMUNES:
-1. Almacenar información sensible.
-2. Para aplicar configuraciones que sean espesificas para entornos de desarrollo.
-3. Para despliegue.
-
-### Cuando se crean aplicaciones con Node JS del lado del back-end es muy usual conectarse a servicios de terceros, ejemplos:
-
-* Bases de datos: Cuando se establece una conexión a una base de datos desde un back-end se debe ingresar la información necesaria para hacer de forma exitosa dicha conexión, información como el usuario de la base de datos, la contraseña, el host, el puerto entre otros.
-
-* APIS de terceros: Estos servicios brindan un token y client_id que sirven para conectarse a estos servicios.
-
-## Formas de crear las conexiones con bases de datos.
-> Tipeando de forma directa: Una forma de hacer estas conexiones es tipeando de forma explicita en el código, en otras palabras quemando los datos, todos esos datos LOS CUALES POR SUPUESTO **SON MUY SENSIBLES** y por lo tanto es una **pesima** practica hacerlo de esta forma. Al publicar esto en un repositorio todo el mundo tiene acceso a esa información y podran acceder a la base de datos.
-
-> Usando variables de entorno: Estas le añaden una capa de seguridad al código dado que ya no muestra los datos de forma quemada.
-
-## Uso de variables de entorno en Node JS
-
-### Objeto process.env:
-process.env es un objeto **GLOBAL** que contiene como propiedades todas las variables de entorno.
-
-Se puede crear un objeto config que contenga todas las variables de etorno. Una practica que suele seguirse es protegerlas un poco y guardar todas estas variables de entorno en una URL con todo el esquema de conexión.
-
-Para acceder al archivo .env y cargar las variables a un proceso de node, se debe instalar un paquete para poder acceder a estas y se llama al método config.
-
-Es un archivo que va contener todas las variables de entorno:
-- Instalar el modulo dotenv
-- Crear la carpeta config
-- Crear el archivo .env
-- Crear el archivo .env.example
-- **No se debe subir el repositorio el .env**
-- **Se pone en el repositorio el .env.example**
-- Todas se escriben en UPPERCASE
-- Si hay varias palabras se separan por _
-- Creación de de las variables de entorno
-- Crear el script
-
-### Archivo .env y .env.example
-Se deben separar debido a que en el .env existe información sensible. Sin embargo, es necesario mostrar cuales son esas variables de etorno, por lo tanto, en el .env.example se ponen como un ejemplo de cuales son sin ponerlas de forma explicita.
 
 ---
-# CAPA DE librerias
-Estan se encargan de todo lo que tiene que ver con conexión con terceros, es en esta carpeta donde se crean todos los archivos que se encargan de conectar a la back-end con terceros como **Bases de datos** y **APIS**
 
-# CONEXIÓN A BASE DE DATOS
-Existen diversas formas de conectar el **Backend** con **bases de datos**.
-
-1. La más común, por lo menos para empezar a entender el como gestionar información de una base de datos desde el backend es descargando un SGDB y buscando la libreria que permita conectar a Node js con dicho motor. Sin embargo, la forma recomendada es con un pooling.
-
-> Conexión con POSTGRESQL: Para conectar Node JS con una base de datos pg: https://node-postgres.com/
-> Conexión con MYSQL: Para conectar Node JS con una base de datos mysql: https://node-postgres.com/
-> Conexión con SQLSERVER: Para conectar Node JS con una base de datos sqlserver: https://node-postgres.com/
-
-## Pooling
-Cuando se trabaja con bases de datos en el backend, cada vez que se hace una operación contra la misma, primero se debe generar una conexión con la base de datos.
-
-Por lo que tener que llamar al método que conecta la base de datos con el backend por cada vez que se quiere hacer una operación se vuelve muy tedioso. Ademas, eso esta mal porque puede sobrecargar el servidor de request. Entonces, esto es un problema porque por cada request se crea una negociacion con la base de datos, se tarda 20ms o mas, y asi se va saturando el servidor. Por lo tanto el SGDB proporcionan una interfaz llamada pool.
-
-Un pool de conexiones basicamente es un conjunto limitado de conexiones a una base de datos, que es manejado por un servidor de aplicaciones de forma tal, que dichas conexiones pueden ser reutilizadas por los diferentes usuarios.
-
-Es como un lugar en el que se centralizan estas conexiones para no tenerlas que estar llamando cada vez, si no desde el pool. Lo que hace el pool es sencillamente es ser un mediador entre las bases de datos y el cliente.
-
-Entonces a medida que los clientes empiecen a hacer consultas, la aplicacion de manera asincrona se conectara con el pool y el pool se encargara tanto de abrir o cerrar conexiones para que la informacion siga trabajando de manera eficiente.
-
-![](./assets/OOFTe.png)
-
-
----
-# ORM: Object-Relational mapping
-Un ORM es un modelo de programación es una capa que permite mapear las estructuras de una base de datos relacional en entidades de la programación orientada a objetos. Es decir, el ORM toma las tablas y las convierte en POO basicamente. Es como usar programación orientada a objetos para hacer operaciones contra la base de datos. El ORM es agnostico, pues este se puede usar en cualquier SGDB.
-
-Al abstraer este tipo de programación, se delega su implementación al Backend, es decir, le añadimos una de responsabilidad a la capa transaccional del servidor:
-
-✨Los beneficios son los siguientes:
-
-Acciones como CRUD (Create, Read, Update, Delete) son administradas mediante ORM.
-La implementación de seeds o semillas, nos permiten recuperar, mediante código, la estructura de una BD.
-
-## EL DAO Y DTO
-Una de las bases teóricas para entender este modelo es mediante el conocimiento del DAO (Data Access Object) y DTO (Data Transfer Object), los cuales nos permiten desestructurar un ORM en módulos de abstracción para **acceder a la DB** y **transferir datos desde la misma DB**, respectivamente hablando.
-
-🙃Los contras serían:
-- Delegación de responsabilidades al server.
-- Descentralización de trabajo, directa, de una Data Base.
-
-## SEQUELIZE
-* npm install --save sequelize
-## Instalar segun la base de datos a utilizar:
-* npm install --save pg pg-hstore
-* npm install --save mysql2
-* npm install --save sqlite3
-* npm install --save tedious / MSSQL
-
-## Caracteristicas de Sequelize
-Sequelize gestiona la conexión con la base de datos.
-
-## Instalación y configuración
-Lo primero que estamos haciendo es importar la clase Sequelize despues lo que se hace es crear una nueva instancia de esta clase que recibe como parámetros en su constructor, el nombre de la base de datos, el nombre del usuario, la contraseña, y un objeto de configuración donde especificamos el host de nuestra base de datos, el dialect que es donde ponemos que base de datos se esta utilizando.
-
-Sequelize permite utilizar consultas de forma directa con sql:
-
-## Modelos en sequelize
-
-Los modelos en sequelize nos permiten representar las tablas y manipular estos datos, un modelo se define de la siguiente manera:
-
-Usando la clase class model Extends Model.
-Usando el método sequelize.define()
-Consultar los tipos de datos y configuraciones de columnas que admite sequelize.
-Por defecto el nombre que se le de al modelo se crea en la base de datos
-Se puede crear explicitamente el nombre de la tabla aunque el modelo tenga otro nombre
-
-### Create Update and Delete
-### Sincronización de Modelos.
-
-Aquí es donde entra en juego la sincronización de modelos. Un modelo se puede sincronizar con la base de datos llamando a model.sync(options), una función asíncrona (que devuelve una Promesa). Con esta llamada, Sequelize realizará automáticamente una consulta SQL a la base de datos. Tenga en cuenta que esto cambia solo la tabla en la base de datos, no el modelo en el lado de JavaScript.
-
->User.sync()- Esto crea la tabla si no existe (y no hace nada si ya existe)
->User.sync({ force: true })- Esto crea la tabla, borrandola primero si ya existía
->User.sync({ alter: true })- Esto verifica cuál es el estado actual de la tabla en la base de datos (qué columnas tiene, cuáles son sus tipos de datos, etc.), y luego realiza los cambios necesarios en la tabla para que coincida con el modelo.
-
->Se puede hacer a nivel de un solo modelo Model.sync()
-
->Se puede hacer a nivel generl todos los modelos existentes sequelize.sync
-
-## Consultas
-Para hacer consultas con Sequelize
-Se puede mapear con POO o se le puede mandar una consulta directa tipo SQL, la información la devuelve en un array, con dos posiciones la primera es la data como tal y la otra es meta data que viene a ser como informacíon adicional de la consulta.
-
-## Cambio de base de datos
-
-## Migraciones
-Cuando una aplicación esta en producción esta el dilema de como se sincroniza la base de datos con lo que se va haciendo en local ?
-
-El problema de sequelize.sync() es que empieza a leer los modelos, crea tablas y hace relist (se sobrescribe información), no se aconseja que se corra esto así en producción. Es mejor sincronizar con un sistema de migraciones.
-
-Las migraciones son como un sistema de control de versiones para bases de datos.
-
-Mantienen un hisotrial del esquema que se va manteniendo en la base de datos.
-
-Usualmente se va tener una primer migracicón que es la que crea toda la estructura inicial y todas las tabals como lass columnas con sus respectivos tipos de datos. Luego a medida que se van añadiendo campos o haciendo alguna modificacion deberiamos tener esto en un sistema de migraciones, ¿Porque? esto es debido a que cuando un sistema esta corriendo en producción, se debe replicar todo y con las migraciones se pueden enviar nuevos **releases**. El sistema en producción debe saber en que momento de la migración para que no se rescriban datos ni repita información.
-
-Nuevamente la función sync crea nuevamente tablas y demás lo cual es muy peligroso para
-cuando el sistema esta en producción dado que se puede sobrecargar al estar creando tablas una y otra vez cuando se lanza un nuevo feature, e incluso puede haber pedida de información.
-
-La migración corre o toma como punto de referencia la ultima que se haya corrido.
-
-## ¿COMO CREAR MIGRACIONES EN SEQUELIZE?
-
-Se instala npm i sequelize-cli -D
-
->Agregar un archivo de configuración en la carpeta raiz llamado -sequelizerc
-
->Las migraciones van a tener su propia conexíon independiente a la que ya tiene la aplicación
-
->Se deben declarar los ambientes de development y production
-
-> A diferencia de laravel que trae los comandos de terminal por defecto, en sequelize debemos crearlos y la forma de hacerlo es creando scripts de NPM.
-
-## Seeders
-### UP:
-### DOWN:
-### Comandos de migraciones
-
-* sequelize-cli db:migrate: Run pending migrations.
-* sequelize-cli db:migrate:schema: timestamps:add Update migration table to have timestamps.
-* sequelize-cli db:migrate:schema: timestamps:add Update migration table to have timestamps
-* sequelize-cli db:migrate:status: List the status of all migrations
-* sequelize-cli db:migrate:undo: Reverts a migration
-* sequelize-cli db:migrate:undo: all Revert all migrations ran
-
-* sequelize-cli db:seed: Run specified seeder
-* sequelize-cli db:seed:undo: Deletes data from the database
-* sequelize-cli db:seed:all: Run every seeder
-* sequelize-cli db:seed:undo:all: Deletes data from the database
-
-* sequelize-cli db:create Create database specified by configuration
-* sequelize-cli db:drop Drop database specified by configuration
-* sequelize-cli init Initializes project
-* sequelize-cli init:config Initializes configuration
-* sequelize-cli init:migrations Initializes migrations
-* sequelize-cli init:models Initializes models
-* sequelize-cli init:seeders Initializes seeders
-* sequelize-cli migration:generate Generates a new migration file
-[aliases: migration:create]
-* sequelize-cli model:generate Generates a model and its migration
-[aliases: model:create]
-* sequelize-cli seed: generate Generates a new seed file.
-* generate create-user
----
-
-Cuando se corre el comanndo run esot genera una tabla llamada SequelizeMeta esta tabla es clave, esto es lo que se permite que se haga el tracking (historico) de la migración, es como un registro o historial por lo cual si se vuelve a correr la migración ya no va a rescirbir información porque ya tiene registro de que esa migración se hizo eso permite tener un orden a la hora de mandar cambios a producción
-
-Para hacer modificaciones a tablas ya creadas se tiene que ir al modelo se hace el camibio pertinente y se informa de esto a la migración.
-
-
-## Relaciones en sequelize
-
-One to one relation
-One to many
-Many to Many
-
-
-https://pigexception.wordpress.com/2016/03/26/patron-de-diseno-dao/
-
-
----
 # Considereaciones para hacer deploy
 
 1. Evaluar los Cors
@@ -419,6 +210,7 @@ Insomnia o postamn y este tipo de herramientas nos abstraen de ver este error po
 
 ### Las formas de resolver el problema es la siguiente:
 
+
 # Deploy con heroku
 npm i -g heroku
 heroku --version
@@ -432,6 +224,174 @@ Heroku local web
 https://git.heroku.com/peaceful-headland-45148.git
 
 
+<<<<<<< HEAD
+=======
+---
+# CAPA DE librerias
+Estan se encargan de todo lo que tiene que ver con conexión con terceros, es en esta carpeta donde se crean todos los archivos que se encargan de conectar a la back-end con terceros como **Bases de datos** y **APIS**
+
+
+# CONEXIÓN A BASE DE DATOS
+Existen diversas formas de conectar el backend con bases de datos
+
+1. La más común, por lo menos para empezar a entender el como gestionar información de una base de datos desde el backend es descargando un SGDB y buscando la libreria que permite conectar a Node js con dicho motor.
+
+> Conexión con POSTGRESQL: Para conectar Node JS con una base de datos pg: https://node-postgres.com/
+> Conexión con MYSQL: Para conectar Node JS con una base de datos mysql: https://node-postgres.com/
+> Conexión con SQLSERVER: Para conectar Node JS con una base de datos sqlserver: https://node-postgres.com/
+
+## Pooling
+Cuando se trabaja con bases de datos en el backend, cada vez que se hace una operación contra la misma, antes se debe generar una conexión con la base de datos. Por lo que tener que llamar al método que conecta la base de datos con el backend por cada vez que se quiere hacer una operación se vuelve muy tedioso. Ademas, eso esta mal porque puede sobrecargar el servidor de request. Entonces, esto es un problema porque por cada request se crea una negociacion con la base de datos, se tarda 20ms o mas, y asi se va saturando el servidor. Por lo tanto SGDB proporcionan una interfaz llamada pool.
+
+Un pool de conexiones basicamente es un conjunto limitado de conexiones a una base de datos, que es manejado por un servidor de aplicaciones de forma tal, que dichas conexiones pueden ser reutilizadas por los diferentes usuarios. Es como un lugar en el que se centralizan estas conexiones para no tenerlas que estar llamando cada vez, si no desde el pool. Lo que hace el pool es sencillamente es ser un mediador entre las bases de datos y el cliente. Entonces a medida que los clientes empiecen a hacer consultas, la aplicacion de manera asincrona conectara con el pool y el pool se encargara tanto de abrir o cerrar conexiones para que la informacion siga trabajando de manera eficiente.
+![](./assets/OOFTe.png)
+
+
+---
+
+# ORM: Object-Relational mapping
+
+
+Un ORM es un modelo de programación que permite mapear las estructuras de una base de datos relacional en entidades de la programación orientada a objetos. Es decir, el ORM toma las tablas y las convierte en POO. Es como usar programación orientada a objetos para hacer operaciones contra la base de datos. El ORM es agnostico, pues este se puede usar en cualquier SGDB.
+
+Al abstraer este tipo de programación, se delega su implementación al Backend, es decir, le añadimos una de responsabilidad a la capa transaccional del servidor:
+.
+✨Los beneficios son los siguientes:
+
+Acciones como CRUD (Create, Read, Update, Delete) son administradas mediante ORM.
+La implementación de seeds o semillas, nos permiten recuperar, mediante código, la estructura de una BD.
+.
+Una de las bases teóricas para entender este modelo es mediante el conocimiento de DAO (Data Access Object) y DTO (Data Transfer Object), los cuales nos permiten desestructurar un ORM en módulos de abstracción para acceder a la DB y transferir datos desde la misma DB, respectivamente hablando.
+.
+🙃Los contras serían:
+
+Delegación de responsabilidades al server
+Descentralización de trabajo, directa, de una BD.
+
+
+## SEQUELIZE
+* npm install --save sequelize
+# Instalar segun la base de datos a utilizar:
+* npm install --save pg pg-hstore
+* npm install --save mysql2
+* npm install --save sqlite3
+* npm install --save tedious // MSSQL
+
+## Caracteristicas de Sequelize
+Sequelize gestiona la conexión con la base de datos. Una de las bases teóricas para entender este modelo es mediante el conocimiento de DAO (Data Access Object) y DTO (Data Transfer Object), los cuales nos permiten desestructurar un ORM en módulos de abstracción para acceder a la DB y transferir datos desde la misma DB, respectivamente hablando.
+
+## Instalación y configuración
+Lo primero que estamos haciendo es importar la clase Sequelize despues lo que se hace es crear una nueva instancia de esta clase que recibe como parámetros en su constructor, el nombre de la base de datos, el nombre del usuario, la contraseña, y un objeto de configuración donde especificamos el host de nuestra base de datos, el dialect que es donde ponemos que base de datos se esta utilizando.
+
+Sequelize permite utilizar consultas de forma directa con sql:
+
+## Modelos
+
+Los modelos en sequelize nos permiten representar nuestras tablas y manipular estos datos, un modelo se define de la siguiente manera:
+
+https://ed.team/blog/agiliza-tu-desarrollo-en-nodejs-con-el-orm-sequelize
+https://runebook.dev/es/docs/sequelize/manual/model-basics#:~:text=Un%20modelo%20es%20una%20abstracci%C3%B3n,y%20sus%20tipos%20de%20datos).
+
+
+## Consultas
+## Cambio de base de datos
+## Migraciones
+
+
+---
+# VARIABLES DE AMBIENTE / ENTORNO
+Las variables de entorno son variables dinamicas que afectan a el comportamiento de una aplicación y son usadas cuando una aplicación corre en diferentes entornos, por ejemplo, el de desarrollo o el de producción.
+
+## USOS MÁS COMUNES:
+1. Almacenar información sensible
+2. Para aplicar configuraciones que sean espesificas para entornos de desarrollo
+3. Para despliegue
+
+Cuando se crean aplicaciones con Node JS del lado del back-end es muy usual conectarse a servicios de terceros, ejemplos:
+
+* Bases de datos: Cuando se establece una conexión a una base de datos desde un back-end se debe ingresar la información necesaria para hacer de forma exitosa dicha conexión, información como el usuario de la base de datos, la contraseña, el host, el puerto entre otros.
+
+* APIS de terceros: Estos servicios brindan un token y client_id que sirven para conectarse a estos servicios.
+
+## Formas de crear las conexiones
+> Tipeando de forma directa: Una forma de hacer estas conexiones es tipeando de forma explicita en el código, en otras palabras quemando los datos, todos esos datos **LOS CUALES POR SUPUESTO SON MUY SENSIBLE** y por lo tanto es una **pesima** practica hacerlo de esta forma. Al publicar esto en un repositorio todo el mundo tiene acceso a esta información.
+
+> Usando variables de entorno: Estas le añaden una capa de seguridad al código dado que ya no muestra los datos de forma quemada.
+
+
+## Uso de variables de entorno en Node JS
+
+### Archivo .env y .env.example
+
+### process.env:
+process.env es un objeto **GLOBAL** que contiene como propiedades todas las variables de entorno
+
+Se deben separar debido a que en el .env existe información sensible. Sin embargo, es necesario mostrar cuales son esas variables de etorno, por lo tanto, en el .env.example se ponen como un ejemplo de cuales son sin ponerlas de forma explicita.
+
+Es un archivo que va contener todas las variables de entorno:
+- Instalar el modulo dotenv
+- Crear la carpeta config
+- Crear el archivo .env
+- Crear el archivo .env.example
+- **No se debe subir el repositorio el .env**
+- **Se pone en el repositorio el .env.example**
+- Todas se escriben en UPPERCASE
+- Si hay varias palabras se separan por _
+- Creación de de las variables de entorno
+- Crear el script
+
+
+
+
+
+## CON DOCKER
+- Configurar docker con bases de datos
+- Crear el archivo docker-compose.yml
+
+### Comandos
+- docker-compose up -d postgres
+- docker-compose ps
+- docker-compose down
+
+## Explorando la base de datos del contenedor
+Son formas de manipular la
+### Con terminal
+-docker-compose exec postgres bash: Terminal
+-ls -l
+-psql -h localhost -d my_store -U admin
+- \d+
+- \1
+
+### Con motores graficos:
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+>>>>>>> 609dcd56d146ee3735e8f4926547a514939d782c
 
 
 
