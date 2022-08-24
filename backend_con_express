@@ -12,8 +12,8 @@
 10. Crear la capa de seguridad, establecer todo lo relacionado con autenticación y autorización.
 11. Crear y correr de pruebas.
 12. Hacer deploy.
----
 
+---
 # 1) The Clean Architecture.
 Es un estilo de arquitectura de software que funciona separando el software en capas.
 
@@ -35,7 +35,6 @@ De una forma más transparente:
 
 ![](./assets/Captura%20de%20pantalla%202022-07-31%20170216.png)
 
-
 ---
 # 2) Configuración de entorno de etorno de desarrollo y de producción con buenas practicas:
 
@@ -50,16 +49,15 @@ Establecer una buena configuración servira para trabajar de una forma más apro
 ### Instalación de paquetes:
 npm i nodemon eslint eslint-config-prettier eslint-plugin-prettier prettier -D
 
----
 # Instalación de la librerias que seran necesarias para el desarrollo
 
-A continuación se presenta un paquete de librerias que pueden ser utiles para crear backend con node js:
+Paquete de librerias que pueden ser utiles para crear backend con node js:
 
 1. Express: npm i express
 
 2. Eslint:
 
-3. nanoid
+3. nanoid:
 
 4.
 
@@ -82,7 +80,7 @@ npm install --save-dev @types/joi
 * npm i sequelize-cli -D: Para migraciones
 *
 
-npm i dotenv
+7. Dotenv: npm i dotenv
 
 ---
 # Creación del servidor con express JS
@@ -106,8 +104,7 @@ Express contiene algo llamado *parser* el cual es un middleware que ayuda a toma
 
 Hace parte de los principios SOLID. En este caso *Single Responsability Principle* establece que es una mala practica tener código que hace de todo, es decir si una función tiene como nombre sumar, no debería en su cuerpo estar calculando integrales. Esto se puede llevar al plano de los archivos, routing, clases, modulos, servicios y más. Es aqui donde se lleva realmente acabo la arquitectura.
 
----
-# Creación de la capa de routing y controladores
+# Creación de la capa de routing
 
 * Como se menciono the clean architecture establece que el routing hace parte **de la capa de acceso a los servicios** y también se encarga de proporcionar los EndPoints a los cuales los clientes se van a conectar para acceder a los recursos. Sin embargo, es una pesima practica definir todo el routing en el archivo index donde se levanta el servidor.
 * Express cuenta con sistema de enrrutamiento el cual permite separar las rutas.
@@ -116,6 +113,7 @@ Hace parte de los principios SOLID. En este caso *Single Responsability Principl
 * Lo ideal es crear una carpeta que contenga todo el routing.
 * El nombre que se le dan a estos archivos dependen del equipo de desarrollo.
 * Se debe definir un path principal para ese router, es decir debe tener como su entorno propio.
+
 ---
 # Creación de los middlewares
 
@@ -151,7 +149,7 @@ Los middlewares sirven para eso, pues son FUNCIONES que se ejecutan de **FORMA P
 ## Middleware de tipo error.
 Es ideal que antes de que la petición llegue al endpoint se capturen los posibles errores. Sin embargo, estos no deben devolverse a secas. Los errores hay que gestionarlos, darles un formato y mandarlos de una forma clara y bien presentada al cliente.
 
-### Sintaxis middleware de error
+## Sintaxis middleware de error
 Tienen el parámetro error de primero **(error,req,res,next).**
 
 Son utiles para crear un middleware GLOBAL (funcionan a nivel de todos los endpoints) que acompañe a todas las peticiones de tal manera de que si sale un error este se capture y se le de un formato para retornalo, **¿que formato?** ejemplo: _el tipo de error, el codigo de estado y un mensaje._.
@@ -165,12 +163,23 @@ Esta libreria ayuda a gestionar de forma más eficiente lo errores. Pues hasta e
 isBoom: Si es un error de tipo boom
 output: Toda la informacion del error
 
-#### Ventajas de usar Boom:
+### Ventajas de usar Boom:
 - Ayuda a no tener que poner el status code de forma manual
 - Gestiona mejor los errores
 
 
 ## Middleware de tipo validación
+VALIDACIONES
+
+Comprobar que la información que recibimos en algun punto tiene el formato o tipo correcto.
+
+Ventajas
+-Nos ahorramos ejecutar lineas de código inncesarias
+
+-Protege ciertas inseguridades
+
+-Las validaciones pueden estar divividas segun las capas, es decir a medida que se adentrando entre capas pueden haber mas validaciones, por ejemplo se puede entrar a una capa de oruting y alli haber validaciones y si pasan pues se da acceso a otra capa que puede ser la de logica de negocios, y en esta tambien tener otras validaciones. En otras palabras se pueden tener varios puntos de validación conforme la responnabilidades que tengsa cada capa de nuestro servidor.
+
 Otro uso muy común de los middlewares es validar los datos que vienen desde el cliente (front-end). Para esto existe una librería llamada Joi.
 
 Como backend un desarrollador debería asgurarse de que lo que le envia el front-end cumple con la integridad de datos, que un precio este un formato adecuado o por ejemplo que se envien los atributos que se esperan, con los middlewares se pueden capturar este tipo de errores antes de que lleguen a la capa de servicios.
@@ -182,6 +191,8 @@ Como backend un desarrollador debería asgurarse de que lo que le envia el front
 Es la capa donde se pone la lógica del negocio como tal. Esta capa encapsula todos los casos de uso.
 
 Los servicios tienen la lógica del negocio y obtienen información por medio de librerias a una base de datos o de una api externa. Luego estos servicios pueden sen consumidos por los controladores. Practicamente en esta capa se centraliza la lógica de la aplicación. Pero esta capa es accedida una vez se ha cumplido con todo lo que los controladores y middlewares tienen que hacer, ya sea: Capturar errores, hacer validaciones, verificar autenticación y autorización.
+
+
 ---
 # VARIABLES DE AMBIENTE / ENTORNO
 Tener archivos de configuraciones separados en diferentes ambientes es una buena practica. Cuando una aplicación web se va a a desplegar se esta hablando de que una aplicación se va usar al menos en dos ambientes diferentes. _Producción y desarrollo_.
@@ -258,7 +269,6 @@ Entonces a medida que los clientes empiecen a hacer consultas, la aplicacion de 
 
 ![](./assets/OOFTe.png)
 
-
 ---
 # ORM: Object-Relational mapping
 Un ORM es un modelo de programación es una capa que permite mapear las estructuras de una base de datos relacional en entidades de la programación orientada a objetos. Es decir, el ORM toma las tablas y las convierte en POO basicamente. Es como usar programación orientada a objetos para hacer operaciones contra la base de datos. El ORM es agnostico, pues este se puede usar en cualquier SGDB.
@@ -276,6 +286,12 @@ Una de las bases teóricas para entender este modelo es mediante el conocimiento
 🙃Los contras serían:
 - Delegación de responsabilidades al server.
 - Descentralización de trabajo, directa, de una Data Base.
+
+## DAO
+
+# DTO
+Objeto que contiene información que se transfiere entre procesos.
+
 
 ## SEQUELIZE
 * npm install --save sequelize
@@ -323,7 +339,7 @@ Se puede mapear con POO o se le puede mandar una consulta directa tipo SQL, la i
 ## Cambio de base de datos
 
 ## Migraciones
-Cuando una aplicación esta en producción esta el dilema de como se sincroniza la base de datos con lo que se va haciendo en local ?
+Cuando una aplicación esta en producción esta el dilema de como se sincroniza la base de datos con lo que se va haciendo en local?
 
 El problema de sequelize.sync() es que empieza a leer los modelos, crea tablas y hace relist (se sobrescribe información), no se aconseja que se corra esto así en producción. Es mejor sincronizar con un sistema de migraciones.
 
@@ -386,208 +402,17 @@ Cuando se corre el comanndo run esot genera una tabla llamada SequelizeMeta esta
 
 Para hacer modificaciones a tablas ya creadas se tiene que ir al modelo se hace el camibio pertinente y se informa de esto a la migración.
 
-
 ## Relaciones en sequelize
 
-1. One to one relation
-
+1. One to one
 Tiene dos métodos para expresar relaciones esto dependiendo de quien va cargar con las relación.
-
 HasOne ->
 BelongsTo ->
 
-
-
-One to many
-Many to Many
-
-
-https://pigexception.wordpress.com/2016/03/26/patron-de-diseno-dao/
-
+2. One to many
+3. Many to Many
 
 ---
-# Considereaciones para hacer deploy
-
-1. Evaluar los Cors
-2. Que la api este en un servidor https
-3. Correr todos los procesos de build (typescript o sass por ejemplo)
-4. Remover todos los console.log
-5. Seguridad (helmet)
-6. Testing
-
-# CORS
-Uno de los problemas más comunes es el problema de cors, es un problema muy común a la hora de conectar el **Back-end con el Front-end**.
-
-### Cross.Origin Resource Sharing
-Significa que los servidores tienen una protección por defecto y es que solo aceptan peticiones desde su mismo origen.
-
-Si las peticiones salen desde el mismo origen (localhost) el Backend acepta la petición, pero cuando se tienen diferentes origenes (clientes, un front o un movil).
-
-Insomnia o postamn y este tipo de herramientas nos abstraen de ver este error porque por debajo usan un proxy que cambia el origen.
-
-### Las formas de resolver el problema es la siguiente:
-
-# Deploy con heroku
-npm i -g heroku
-heroku --version
-heroku login
-heroku create
-git remote -v
-  "engines":{
-    "node": "14.x"
-  }
-Heroku local web
-https://git.heroku.com/peaceful-headland-45148.git
-
-
-<<<<<<< HEAD
-=======
----
-# CAPA DE librerias
-Estan se encargan de todo lo que tiene que ver con conexión con terceros, es en esta carpeta donde se crean todos los archivos que se encargan de conectar a la back-end con terceros como **Bases de datos** y **APIS**
-
-
-# CONEXIÓN A BASE DE DATOS
-Existen diversas formas de conectar el backend con bases de datos
-
-1. La más común, por lo menos para empezar a entender el como gestionar información de una base de datos desde el backend es descargando un SGDB y buscando la libreria que permite conectar a Node js con dicho motor.
-
-> Conexión con POSTGRESQL: Para conectar Node JS con una base de datos pg: https://node-postgres.com/
-> Conexión con MYSQL: Para conectar Node JS con una base de datos mysql: https://node-postgres.com/
-> Conexión con SQLSERVER: Para conectar Node JS con una base de datos sqlserver: https://node-postgres.com/
-
-## Pooling
-Cuando se trabaja con bases de datos en el backend, cada vez que se hace una operación contra la misma, antes se debe generar una conexión con la base de datos. Por lo que tener que llamar al método que conecta la base de datos con el backend por cada vez que se quiere hacer una operación se vuelve muy tedioso. Ademas, eso esta mal porque puede sobrecargar el servidor de request. Entonces, esto es un problema porque por cada request se crea una negociacion con la base de datos, se tarda 20ms o mas, y asi se va saturando el servidor. Por lo tanto SGDB proporcionan una interfaz llamada pool.
-
-Un pool de conexiones basicamente es un conjunto limitado de conexiones a una base de datos, que es manejado por un servidor de aplicaciones de forma tal, que dichas conexiones pueden ser reutilizadas por los diferentes usuarios. Es como un lugar en el que se centralizan estas conexiones para no tenerlas que estar llamando cada vez, si no desde el pool. Lo que hace el pool es sencillamente es ser un mediador entre las bases de datos y el cliente. Entonces a medida que los clientes empiecen a hacer consultas, la aplicacion de manera asincrona conectara con el pool y el pool se encargara tanto de abrir o cerrar conexiones para que la informacion siga trabajando de manera eficiente.
-![](./assets/OOFTe.png)
-
-
----
-
-# ORM: Object-Relational mapping
-
-
-Un ORM es un modelo de programación que permite mapear las estructuras de una base de datos relacional en entidades de la programación orientada a objetos. Es decir, el ORM toma las tablas y las convierte en POO. Es como usar programación orientada a objetos para hacer operaciones contra la base de datos. El ORM es agnostico, pues este se puede usar en cualquier SGDB.
-
-Al abstraer este tipo de programación, se delega su implementación al Backend, es decir, le añadimos una de responsabilidad a la capa transaccional del servidor:
-.
-✨Los beneficios son los siguientes:
-
-Acciones como CRUD (Create, Read, Update, Delete) son administradas mediante ORM.
-La implementación de seeds o semillas, nos permiten recuperar, mediante código, la estructura de una BD.
-.
-Una de las bases teóricas para entender este modelo es mediante el conocimiento de DAO (Data Access Object) y DTO (Data Transfer Object), los cuales nos permiten desestructurar un ORM en módulos de abstracción para acceder a la DB y transferir datos desde la misma DB, respectivamente hablando.
-.
-🙃Los contras serían:
-
-Delegación de responsabilidades al server
-Descentralización de trabajo, directa, de una BD.
-
-## SEQUELIZE
-* npm install --save sequelize
-# Instalar segun la base de datos a utilizar:
-* npm install --save pg pg-hstore
-* npm install --save mysql2
-* npm install --save sqlite3
-* npm install --save tedious // MSSQL
-
-## Caracteristicas de Sequelize
-Sequelize gestiona la conexión con la base de datos. Una de las bases teóricas para entender este modelo es mediante el conocimiento de DAO (Data Access Object) y DTO (Data Transfer Object), los cuales nos permiten desestructurar un ORM en módulos de abstracción para acceder a la DB y transferir datos desde la misma DB, respectivamente hablando.
-
-## Instalación y configuración
-Lo primero que estamos haciendo es importar la clase Sequelize despues lo que se hace es crear una nueva instancia de esta clase que recibe como parámetros en su constructor, el nombre de la base de datos, el nombre del usuario, la contraseña, y un objeto de configuración donde especificamos el host de nuestra base de datos, el dialect que es donde ponemos que base de datos se esta utilizando.
-
-Sequelize permite utilizar consultas de forma directa con sql:
-
-## Modelos
-
-Los modelos en sequelize nos permiten representar nuestras tablas y manipular estos datos, un modelo se define de la siguiente manera:
-
-https://ed.team/blog/agiliza-tu-desarrollo-en-nodejs-con-el-orm-sequelize
-https://runebook.dev/es/docs/sequelize/manual/model-basics#:~:text=Un%20modelo%20es%20una%20abstracci%C3%B3n,y%20sus%20tipos%20de%20datos).
-
-
-## Consultas
-## Cambio de base de datos
-## Migraciones
-
-
-
-
-
-
-
-
----
-# VARIABLES DE AMBIENTE / ENTORNO
-Las variables de entorno son variables dinamicas que afectan a el comportamiento de una aplicación y son usadas cuando una aplicación corre en diferentes entornos, por ejemplo, el de desarrollo o el de producción.
-
-## USOS MÁS COMUNES:
-1. Almacenar información sensible
-2. Para aplicar configuraciones que sean espesificas para entornos de desarrollo
-3. Para despliegue
-
-Cuando se crean aplicaciones con Node JS del lado del back-end es muy usual conectarse a servicios de terceros, ejemplos:
-
-* Bases de datos: Cuando se establece una conexión a una base de datos desde un back-end se debe ingresar la información necesaria para hacer de forma exitosa dicha conexión, información como el usuario de la base de datos, la contraseña, el host, el puerto entre otros.
-
-* APIS de terceros: Estos servicios brindan un token y client_id que sirven para conectarse a estos servicios.
-
-## Formas de crear las conexiones
-> Tipeando de forma directa: Una forma de hacer estas conexiones es tipeando de forma explicita en el código, en otras palabras quemando los datos, todos esos datos **LOS CUALES POR SUPUESTO SON MUY SENSIBLE** y por lo tanto es una **pesima** practica hacerlo de esta forma. Al publicar esto en un repositorio todo el mundo tiene acceso a esta información.
-
-> Usando variables de entorno: Estas le añaden una capa de seguridad al código dado que ya no muestra los datos de forma quemada.
-
-
-## Uso de variables de entorno en Node JS
-
-### Archivo .env y .env.example
-
-### process.env:
-process.env es un objeto **GLOBAL** que contiene como propiedades todas las variables de entorno
-
-Se deben separar debido a que en el .env existe información sensible. Sin embargo, es necesario mostrar cuales son esas variables de etorno, por lo tanto, en el .env.example se ponen como un ejemplo de cuales son sin ponerlas de forma explicita.
-
-Es un archivo que va contener todas las variables de entorno:
-- Instalar el modulo dotenv
-- Crear la carpeta config
-- Crear el archivo .env
-- Crear el archivo .env.example
-- **No se debe subir el repositorio el .env**
-- **Se pone en el repositorio el .env.example**
-- Todas se escriben en UPPERCASE
-- Si hay varias palabras se separan por _
-- Creación de de las variables de entorno
-- Crear el script
-
-
-
-
-
-## CON DOCKER
-- Configurar docker con bases de datos
-- Crear el archivo docker-compose.yml
-
-### Comandos
-- docker-compose up -d postgres
-- docker-compose ps
-- docker-compose down
-
-## Explorando la base de datos del contenedor
-Son formas de manipular la
-### Con terminal
--docker-compose exec postgres bash: Terminal
--ls -l
--psql -h localhost -d my_store -U admin
-- \d+
-- \1
-
-### Con motores graficos:
-
-
----
-
 
 # AUTENTICACIÓN Y AUTORIZACIÓN || Authentication and authorization
 Una de las tareas mas comunes del **backend** es hacer autenticación y autorización ambos conceptos diferentes.
@@ -649,6 +474,19 @@ Un cliente se loggea en un E-Commerce. En ese momento se crea la sesión, si el 
 
 ![]()
 
+Nano id es una libreria que genera identificadores
+
+El objeto res tiene el método Cookie permite devolver esa cabecera especial que se va setear en el navegador.
+
+Primero: nombre de la cookie
+Segundo: Es el valor como tal
+Tercero: parametro de opciones, tiene varias, las cuales se pueden ver en documentación. Las más relevantes son por ejemplo httpOnly para que la cookie no se pueda leeer desde js en el navegador, esto aporta cierta seguridad. / secure que permite que la cookie solo se envie por https sobre todo en producción / hay otras como el dominio, tiempo de expiracion,
+
+express necesita un middleware, se instala con npm i cookie-parser, cookieParser()para leer las cookies esto se establece en el expressApp
+
+Para authsesion: Para cerrar sesion lo ideal es que en el servidor se elimine esa sesion tambien por lo cual se puede crear otro endpoit que reicba el mismo sesion id y lo elimine del array o la base de datos, y luego setear la cokie del navegadro a vacio o poner fecha de caducida de un segundo asi nos aseguramos que la sesion id no tenga relavancia ni el en el cliente ni el servidor
+
+
 ## AUTENTICACIÓN POR TOKEN
 Este mecanismo comienza igual, todo parte de una comunicación cliente-servidor. La diferencia radica en como actua el servidor.
 
@@ -669,6 +507,16 @@ No se tiene un seguimiento de lo que va haciendo el usuario dado que no se tiene
 
 ![](./)
 
+El token es bastante particular ya que debe cumplir con 3 requisitos minimamente.
+
+1. Debe permitir meter dentro información, en este se va meter el id del usuaario de tal manera que el token sabe a que usuario  pertenece y a quien autentica.
+
+2. Se debe poder definir la duración de ese token, pasado ese tiempo ese token deja de ser valido.
+
+3. Debe poder ser verificable, esto implica dos cosas, que no se pueda alterar y si se altera deje de ser valido  y que podamos ser capaces de verificar que fuimos nosotros los que los generamos. En ese sentido los tokens tienen una firma y cuando estos llegan al servidor nosotros comprobamos si nosotros hicimos esa firma.
+
+El jwt esta compuesto por tres partes. la uno es la cabecera indica el algoritmo y el tipo de token que vamos a genera, esta en base 64. Dentro de los tokens de tipo json hay algunos más seria buena idea saber cuales son. Luego sigue la información que se ha introducido en el token habitualmente el id del usuario la fecha en la que fue creado el token y la caducidad, no es ideal poner información sensible aqui, es muy importante saber usarlos. La tercera parte es una firma que es una clave secreta si se altera el contenido la clave no coincidira, es un hash. El token cualquier persona lo puede leer porque es base 64 entonces de puede decodificar. Por lo tanto no guardar información personal del usuario en los tokens. Hay otros que van cifrados, es algo más avanzado. JOSE es una libreria
+
 
 # DIFERENCIAS
 > En la sesión solo tenemos un id y ya || El token si puede tener información dentro desde el servidor
@@ -676,6 +524,40 @@ No se tiene un seguimiento de lo que va haciendo el usuario dado que no se tiene
 > La forma de enviarlo: La sesión si se usa el método de cookie entonces el envio al backend es automatico. El envio del token es manual por medio de la cabecera authorization.
 
 > Validación menos segura en sesión || El token es más seguro por que tiene un secreto pero es muy peligroso implementarlo si no se sabe como funciona este a profundidad.
+
+---
+# Considereaciones para hacer deploy
+
+1. Evaluar los Cors
+2. Que la api este en un servidor https
+3. Correr todos los procesos de build (typescript o sass por ejemplo)
+4. Remover todos los console.log
+5. Seguridad (helmet)
+6. Testing
+
+# CORS
+Uno de los problemas más comunes es el problema de cors, es un problema muy común a la hora de conectar el **Back-end con el Front-end**.
+
+### Cross.Origin Resource Sharing
+Significa que los servidores tienen una protección por defecto y es que solo aceptan peticiones desde su mismo origen.
+
+Si las peticiones salen desde el mismo origen (localhost) el Backend acepta la petición, pero cuando se tienen diferentes origenes (clientes, un front o un movil).
+
+Insomnia o postamn y este tipo de herramientas nos abstraen de ver este error porque por debajo usan un proxy que cambia el origen.
+
+### Las formas de resolver el problema es la siguiente:
+
+# Deploy con heroku
+npm i -g heroku
+heroku --version
+heroku login
+heroku create
+git remote -v
+  "engines":{
+    "node": "14.x"
+  }
+Heroku local web
+https://git.heroku.com/peaceful-headland-45148.git
 
 
 
@@ -693,68 +575,3 @@ Here’s what we are looking for :
 • Experience in automated tests, and CI / CD pipelines.
 • Strong experience with Version control.
 • Advanced English level.
-
-
-
-
-//* Para authsesion: Para cerrar sesion lo ideal es que en el servidor se elimine esa sesion tambien por lo cual se puede crear otro endpoit que reicba el mismo sesion id y lo elimine del array o la base de datos, y luego setear la cokie del navegadro a vacio o poner fecha de caducida de un segundo asi nos aseguramos que la sesion id no tenga relavancia ni el en el cliente ni el servidor
-
-//* El token es bastante particular ya que debe cumplir con 3 requisitos minimamente.
-
-// 1. Debe permitir meter dentro información, en este se va meter el id del usuaario de tal manera que el token sabe a que usuario  pertenece y a quien autentica.
-
-// 2 Se debe poder definir la duración de ese token, pasado ese tiempo ese token deja de ser valido.
-
-// 3 Debe poder ser verificable, esto implica dos cosas, que no se pueda alterar y si se altera deje de ser valido  y que podamos ser capaces de verificar que fuimos nosotros los que los generamos. En ese sentido los tokens tienen una firma y cuando estos llegan al servidor nosotros comprobamos si nosotros hicimos esa firma.
-
-// El jwt esta compuesto por tres partes. la uno es la cabecera indica el algoritmo y el tipo de token que vamos a genera, esta en base 64. Dentro de los tokens de tipo json hay algunos más seria buena idea saber cuales son. Luego sigue la información que se ha introducido en el token habitualmente el id del usuario la fecha en la que fue creado el token y la caducidad, no es ideal poner información sensible aqui, es muy importante saber usarlos. La tercera parte es una firma que es una clave secreta si se altera el contenido la clave no coincidira, es un hash. El token cualquier persona lo puede leer porque es base 64 entonces de puede decodificar. Por lo tanto no guardar información personal del usuario en los tokens. Hay otros que van cifrados, es algo más avanzado. JOSE es una libreria
-
-
-// nano id es una libreria que genera identificadores
-
-// El objeto res tiene el método Cookie permite devolver esa cabecera especial que se va setear en el navegador.
-
-// Primero: nombre de la cookie
-// Segundo: Es el valor como tal
-// Tercero: parametro de opciones, tiene varias, las cuales se pueden ver en documentación. Las más relevantes son por ejemplo httpOnly para que la cookie no se pueda leeer desde js en el navegador, esto aporta cierta seguridad. / secure que permite que la cookie solo se envie por https sobre todo en producción / hay otras como el dominio, tiempo de expiracion,
-
-//express necesita un middleware, se instala con npm i cookie-parser, cookieParser()para leer las cookies esto se establece en el expressApp
-
-VALIDACIONES
-
-Comprobar que la información que recibimos en algun punto tiene el formato o tipo correcto.
-
-Ventajas
--Nos ahorramos ejecutar lineas de código inncesarias
-
--Protege ciertas inseguridades
-
--Las validaciones pueden estar divividas segun las capas, es decir a medida que se adentrando entre capas pueden haber mas validaciones, por ejemplo se puede entrar a una capa de oruting y alli haber validaciones y si pasan pues se da acceso a otra capa que puede ser la de logica de negocios, y en esta tambien tener otras validaciones. En otras palabras se pueden tener varios puntos de validación conforme la responnabilidades que tengsa cada capa de nuestro servidor.
-
-
-
-
-DTO
-Objeto que contiene información que se transfiere entre procesos.
-
-
-
-
-
-QUE NECESITO PARA EL BACKEND
-
-Tener un mecanismo que me permita
-
-
-
-
-
-### PARA APRENDER
--Serie de videos de buenas practicas hacker nomada de node js
-- Tareas en segundo plano para no sobrecargar el servidor
-- Tareas en cola - Queu task
-- Web kocks
-- Documentar con swager
-- Patrones de diseño (observador, mediador, inyección de dependencias, factory, builder, singelton, estrategia, estado)
-
-
