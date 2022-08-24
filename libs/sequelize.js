@@ -3,7 +3,7 @@
 const { Sequelize } = require('sequelize');
 const { config } = require('../config/config.js');
 
-//
+
 const setupModels = require('./../database/models');
 
 const USER = encodeURIComponent(config.dbUser);
