@@ -680,8 +680,70 @@ No se tiene un seguimiento de lo que va haciendo el usuario dado que no se tiene
 
 
 
+Here’s what we are looking for :
+• 5+ years of experience in Node.
+• Experience with SQL and NoSQL Databases.
+• Experience with Microservices and the Cloud.
+• Advanced algorithm knowledge.
+• IT infrastructure knowledge.
+• Intermediate agile methodologies management.
+• Strong understanding of best practices, SOLID principles, CLEAN Code, and scalable solutions.
+• Design Patterns knowledge.
+• Experience developing entire applications from scratch.
+• Experience in automated tests, and CI / CD pipelines.
+• Strong experience with Version control.
+• Advanced English level.
 
 
+
+
+//* Para authsesion: Para cerrar sesion lo ideal es que en el servidor se elimine esa sesion tambien por lo cual se puede crear otro endpoit que reicba el mismo sesion id y lo elimine del array o la base de datos, y luego setear la cokie del navegadro a vacio o poner fecha de caducida de un segundo asi nos aseguramos que la sesion id no tenga relavancia ni el en el cliente ni el servidor
+
+//* El token es bastante particular ya que debe cumplir con 3 requisitos minimamente.
+
+// 1. Debe permitir meter dentro información, en este se va meter el id del usuaario de tal manera que el token sabe a que usuario  pertenece y a quien autentica.
+
+// 2 Se debe poder definir la duración de ese token, pasado ese tiempo ese token deja de ser valido.
+
+// 3 Debe poder ser verificable, esto implica dos cosas, que no se pueda alterar y si se altera deje de ser valido  y que podamos ser capaces de verificar que fuimos nosotros los que los generamos. En ese sentido los tokens tienen una firma y cuando estos llegan al servidor nosotros comprobamos si nosotros hicimos esa firma.
+
+// El jwt esta compuesto por tres partes. la uno es la cabecera indica el algoritmo y el tipo de token que vamos a genera, esta en base 64. Dentro de los tokens de tipo json hay algunos más seria buena idea saber cuales son. Luego sigue la información que se ha introducido en el token habitualmente el id del usuario la fecha en la que fue creado el token y la caducidad, no es ideal poner información sensible aqui, es muy importante saber usarlos. La tercera parte es una firma que es una clave secreta si se altera el contenido la clave no coincidira, es un hash. El token cualquier persona lo puede leer porque es base 64 entonces de puede decodificar. Por lo tanto no guardar información personal del usuario en los tokens. Hay otros que van cifrados, es algo más avanzado. JOSE es una libreria
+
+
+// nano id es una libreria que genera identificadores
+
+// El objeto res tiene el método Cookie permite devolver esa cabecera especial que se va setear en el navegador.
+
+// Primero: nombre de la cookie
+// Segundo: Es el valor como tal
+// Tercero: parametro de opciones, tiene varias, las cuales se pueden ver en documentación. Las más relevantes son por ejemplo httpOnly para que la cookie no se pueda leeer desde js en el navegador, esto aporta cierta seguridad. / secure que permite que la cookie solo se envie por https sobre todo en producción / hay otras como el dominio, tiempo de expiracion,
+
+//express necesita un middleware, se instala con npm i cookie-parser, cookieParser()para leer las cookies esto se establece en el expressApp
+
+VALIDACIONES
+
+Comprobar que la información que recibimos en algun punto tiene el formato o tipo correcto.
+
+Ventajas
+-Nos ahorramos ejecutar lineas de código inncesarias
+
+-Protege ciertas inseguridades
+
+-Las validaciones pueden estar divividas segun las capas, es decir a medida que se adentrando entre capas pueden haber mas validaciones, por ejemplo se puede entrar a una capa de oruting y alli haber validaciones y si pasan pues se da acceso a otra capa que puede ser la de logica de negocios, y en esta tambien tener otras validaciones. En otras palabras se pueden tener varios puntos de validación conforme la responnabilidades que tengsa cada capa de nuestro servidor.
+
+
+
+
+DTO
+Objeto que contiene información que se transfiere entre procesos.
+
+
+
+
+
+QUE NECESITO PARA EL BACKEND
+
+Tener un mecanismo que me permita
 
 
 
