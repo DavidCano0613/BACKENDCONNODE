@@ -115,7 +115,7 @@ Hace parte de los principios SOLID. En este caso *Single Responsability Principl
 * Se debe definir un path principal para ese router, es decir debe tener como su entorno propio.
 
 ---
-# Creación de los middlewares
+# Creación de los Middlewares
 
 ## Que son los middlewares y para que sirven
 Como se ha observado anteriormente en los Endpoints se establece cierta lógica. Pero ¿que tal si se necesita ejecutar una función antes de que se ejecute la lógica del endpoint, como por ejemplo, validar permisos o validar que la data venga como se espera?
@@ -146,6 +146,24 @@ Los middlewares sirven para eso, pues son FUNCIONES que se ejecutan de **FORMA P
 - Validan permisos
 - Controlan accesos
 
+---
+
+## VALIDACIONES
+
+Como backend un desarrollador debería asgurarse de que lo que le envia el **front-end** cumple con la integridad de datos, que un precio este en un formato adecuado o por ejemplo que se envien los atributos que se esperan, con los middlewares se pueden capturar este tipo de errores antes de que lleguen a la capa de servicios e se inserte información incorrecta en la base de datos.
+
+Las validaciones permiten comprobar que la información que recibimos en algun punto tiene el formato o tipo correcto.
+
+### Ventajas
+- Nos ahorramos ejecutar lineas de código inncesarias.
+- Protege ciertas inseguridades.
+- Las validaciones pueden estar divividas segun las capas, es decir a medida que se adentrando entre capas pueden haber más validaciones, por ejemplo se puede entrar a una capa de routing y alli haber validaciones y si pasan pues se da acceso a otra capa que puede ser la de logica de negocios y en esta tambien tener otras validaciones. En otras palabras, se pueden tener varios puntos de validación conforme las responsabilidades que tenga cada capa de nuestro servidor.
+
+## Middleware de tipo validación
+Otro uso muy común de los middlewares es validar los datos que vienen desde el cliente (Front-end). Para esto existe una librería llamada Joi.
+
+
+
 ## Middleware de tipo error.
 Es ideal que antes de que la petición llegue al endpoint se capturen los posibles errores. Sin embargo, estos no deben devolverse a secas. Los errores hay que gestionarlos, darles un formato y mandarlos de una forma clara y bien presentada al cliente.
 
@@ -168,25 +186,8 @@ output: Toda la informacion del error
 - Gestiona mejor los errores
 
 
-## Middleware de tipo validación
-VALIDACIONES
-
-Comprobar que la información que recibimos en algun punto tiene el formato o tipo correcto.
-
-Ventajas
--Nos ahorramos ejecutar lineas de código inncesarias
-
--Protege ciertas inseguridades
-
--Las validaciones pueden estar divividas segun las capas, es decir a medida que se adentrando entre capas pueden haber mas validaciones, por ejemplo se puede entrar a una capa de oruting y alli haber validaciones y si pasan pues se da acceso a otra capa que puede ser la de logica de negocios, y en esta tambien tener otras validaciones. En otras palabras se pueden tener varios puntos de validación conforme la responnabilidades que tengsa cada capa de nuestro servidor.
-
-Otro uso muy común de los middlewares es validar los datos que vienen desde el cliente (front-end). Para esto existe una librería llamada Joi.
-
-Como backend un desarrollador debería asgurarse de que lo que le envia el front-end cumple con la integridad de datos, que un precio este un formato adecuado o por ejemplo que se envien los atributos que se esperan, con los middlewares se pueden capturar este tipo de errores antes de que lleguen a la capa de servicios.
-
-
 ---
-# Creación de la capa de servicios
+# CRACIÓN DE LA CAPA DE LÓGICA DE NEGOCIOS O SERVICIOS
 
 Es la capa donde se pone la lógica del negocio como tal. Esta capa encapsula todos los casos de uso.
 
@@ -271,13 +272,21 @@ Entonces a medida que los clientes empiecen a hacer consultas, la aplicacion de 
 
 ---
 # ORM: Object-Relational mapping
-Un ORM es un modelo de programación es una capa que permite mapear las estructuras de una base de datos relacional en entidades de la programación orientada a objetos. Es decir, el ORM toma las tablas y las convierte en POO basicamente. Es como usar programación orientada a objetos para hacer operaciones contra la base de datos. El ORM es agnostico, pues este se puede usar en cualquier SGDB.
+Un ORM es un modelo de programación, es una capa que permite mapear las estructuras de una base de datos relacional en entidades de la programación orientada a objetos. Es decir, el ORM toma las tablas y las convierte en objetos basicamente.
+Es como usar programación orientada a objetos para hacer operaciones contra la base de datos. El ORM es agnostico, pues este se puede usar en cualquier SGDB.
+
+
+Entonces por se pueden hacer las siguientes equivalencias:
+Objeto  - Tabla
+Propiedades - Columnas
+Metodos - Consultas
 
 Al abstraer este tipo de programación, se delega su implementación al Backend, es decir, le añadimos una de responsabilidad a la capa transaccional del servidor:
 
 ✨Los beneficios son los siguientes:
 
-Acciones como CRUD (Create, Read, Update, Delete) son administradas mediante ORM.
+Acciones como CRUD (Create, Read, Update, Delete) son administradas mediante ORM lo que hace la interacción con la base de datos un proceso más natural para el desarrollador.
+
 La implementación de seeds o semillas, nos permiten recuperar, mediante código, la estructura de una BD.
 
 ## EL DAO Y DTO
@@ -290,11 +299,12 @@ Una de las bases teóricas para entender este modelo es mediante el conocimiento
 ## DAO
 
 # DTO
-Objeto que contiene información que se transfiere entre procesos.
+Es un nbjeto que contiene información que se transfiere entre dos procesos o partes de la aplicación.
 
 
 ## SEQUELIZE
 * npm install --save sequelize
+
 ## Instalar segun la base de datos a utilizar:
 * npm install --save pg pg-hstore
 * npm install --save mysql2

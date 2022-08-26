@@ -1,6 +1,6 @@
 const boom = require('@hapi/boom');
 
-//*Recibe un esquema, le decimos donde encontrar la información y retorna un middleware de forma dinamica usando clousures.
+//*Recibe un esquema, le decimos donde encontrar la información y retorna un middleware de forma dinamica usando Clousures.
 
 const validatorHandler = (schema,property) => {
   return (req, res, next) => {
